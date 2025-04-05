@@ -4,6 +4,7 @@ import Loader from "./Loader/Loader";
 import Container from "../ui/container";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
 import { useGetMe } from "@/services/AuthByEmail/AuthByEmail";
+import { showErrorNotification } from "@/lib/helpers/notification";
 
 export const ProtectedRoute: FC<PropsWithChildren> = ({ children }) => {
   const { data, isLoading } = useGetMe();
@@ -11,7 +12,10 @@ export const ProtectedRoute: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffectOnce(() => {
-    if (!isLoading && !data) navigate("/login");
+    if (!isLoading && !data) {
+      showErrorNotification("Не удалось получить информацию о пользователе.");
+      navigate("/login");
+    }
   });
 
   if (isLoading) {

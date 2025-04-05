@@ -26,6 +26,7 @@ import { useDeleteEmployee } from "@/services/Employees/Employees";
 import { ChartColumnBig, Check, Trash2, X } from "lucide-react";
 import { useSelector } from "react-redux";
 import { UnVerifiedUser, VerifiedUser } from "@/services/Employees/types";
+import { User } from "@/services/User/types";
 
 interface Props<TValue> {
   columns: ColumnDef<UnVerifiedUser | VerifiedUser, TValue>[];
@@ -37,7 +38,7 @@ function EmployeesTable<TValue>({ columns, data, isRequest }: Props<TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteEmployee] = useDeleteEmployee();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: { user: User | null }) => state.user);
   const table = useReactTable({
     data,
     columns,

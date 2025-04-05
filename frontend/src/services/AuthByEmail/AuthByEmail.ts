@@ -14,6 +14,7 @@ export const loginApi = baseApi.injectEndpoints({
         url: "/auth/login",
         method: "POST",
         body,
+        credentials: "include",
       }),
     }),
     register: builder.mutation<IRegisterResponse, IRegisterRequest>({

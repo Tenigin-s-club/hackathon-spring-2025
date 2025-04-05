@@ -5,12 +5,27 @@ import { ArrowUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UnverifiedUsers } from "@/services/OfficesOperations/OfficesOperations.type";
 import {
   useGetUnVerEmployees,
   useGetVerifiedEmployees,
 } from "@/services/Employees/Employees";
 import Loader from "@/components/shared/Loader/Loader";
+
+export interface UnverifiedUsers {
+  id: string;
+  email: string;
+  fio: string;
+}
+
+export interface VerifiedUsers extends UnverifiedUsers {
+  role: (
+    | "member_union"
+    | "member_comitet"
+    | "admin"
+    | "secretar"
+    | "corporative_secretar"
+  )[];
+}
 
 const columnsUnVer: ColumnDef<UnverifiedUsers>[] = [
   {
