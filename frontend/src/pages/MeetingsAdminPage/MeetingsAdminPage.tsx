@@ -8,6 +8,7 @@ import { useGetMeetings } from "@/services/Meetings/Meetings";
 import { useState } from "react";
 import { MeetingStatus } from "@/services/Meetings/types";
 import { Loader } from "lucide-react";
+import MeetingCard from "@/components/shared/MeetingCard";
 
 const MeetingsAdminPage = () => {
   const [meetingStatus, setMeetingStatus] = useState<MeetingStatus>("active");
@@ -23,8 +24,8 @@ const MeetingsAdminPage = () => {
       <Button className="mb-6" onClick={() => navigate("/meetings/create")}>
         Создать заседание
       </Button>
-      <Tabs defaultValue="active" className="max-w-[600px]">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="active" className="w-full">
+        <TabsList className="grid max-w-[600px]  grid-cols-3">
           <TabsTrigger
             onClick={() => setMeetingStatus("active")}
             value="active"
@@ -47,11 +48,7 @@ const MeetingsAdminPage = () => {
         <TabsContent value={meetingStatus}>
           <ul className="grid grid-cols-3 gap-4">
             {data?.map((el) => (
-              <Card>
-                <CardHeader>
-                  {new Date(el.end_datetime).toLocaleDateString()}
-                </CardHeader>
-              </Card>
+              <MeetingCard status={meetingStatus} {...el} />
             ))}
           </ul>
         </TabsContent>

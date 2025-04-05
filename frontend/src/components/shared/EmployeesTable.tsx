@@ -25,15 +25,17 @@ import { UnverifiedUsers } from "@/services/OfficesOperations/OfficesOperations.
 import ImportEmployeesButton from "./ImportEmployeesButton";
 
 import { useDeleteEmployee } from "@/services/Employees/Employees";
-import { Settings, Trash2 } from "lucide-react";
+import { ChartColumnBig, Check, Trash2, X } from "lucide-react";
 import { useSelector } from "react-redux";
+import { VerifiedUser } from "@/services/Employees/types";
 
 interface Props<TValue> {
-  columns: ColumnDef<UnverifiedUsers, TValue>[];
-  data: UnverifiedUsers[];
+  columns: ColumnDef<UnverifiedUsers | VerifiedUser, TValue>[];
+  data: UnverifiedUsers[] | VerifiedUser[];
+  isRequest: boolean;
 }
 
-function EmployeesTable<TValue>({ columns, data }: Props<TValue>) {
+function EmployeesTable<TValue>({ columns, data, isRequest }: Props<TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteEmployee] = useDeleteEmployee();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -51,6 +53,9 @@ function EmployeesTable<TValue>({ columns, data }: Props<TValue>) {
       columnFilters,
     },
   });
+
+  const disApprove = (id: string) => id;
+  const Approve = (id: string) => id;
 
   const deleteFunc = async (id: string) => {
     await deleteEmployee(id);
@@ -111,16 +116,33 @@ function EmployeesTable<TValue>({ columns, data }: Props<TValue>) {
                   ))}
 
                   {user?.role.includes("admin") ? (
-                    <TableCell className="flex items-center justify-between gap-2">
-                      <Trash2
-                        color="#DC2626"
-                        className="cursor-pointer"
-                        onClick={() => deleteFunc(data[id]?.id)}
-                      />
+                    <TableCell className="flex items-center justify-evenly gap-2">
+                      {isRequest ? (
+                        <>
+                          <X
+                            onClick={() => disApprove(row.id)}
+                            color="#DC2626"
+                            className="cursor-pointer"
+                          />
+                          <Check
+                            onClick={() => Approve(row.id)}
+                            color="#16a34a"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <ChartColumnBig color="#111111" />
+                          <Trash2
+                            color="#DC2626"
+                            className="cursor-pointer"
+                            onClick={() => deleteFunc(data[id]?.id)}
+                          />
+                        </>
+                      )}
                     </TableCell>
                   ) : (
                     <TableCell className="opacity-40 flex items-center justify-between gap-2">
-                      <Settings />
+                      <ChartColumnBig color="#111111" />
                       <Trash2 color="#DC2626" />
                     </TableCell>
                   )}
