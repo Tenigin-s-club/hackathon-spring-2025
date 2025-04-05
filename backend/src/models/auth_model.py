@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from uuid import UUID
 
 
 class SRegister(BaseModel):
@@ -9,3 +10,9 @@ class SRegister(BaseModel):
 class SLogin(BaseModel):
     email: str
     password: str
+
+class SUser(BaseModel):
+    id: UUID
+    fio: str
+    email: str
+    roles: list[str]

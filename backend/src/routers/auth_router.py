@@ -3,7 +3,7 @@ import uuid
 
 from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
-from src.models.auth_model import SRegister, SLogin
+from src.models.auth_model import SRegister, SLogin, SUser
 from src.repositories.auth_repository import AuthRepository
 from src.utils.security.password import encode_password, check_password
 from src.utils.security.token import encode as encode_jwt
@@ -14,6 +14,21 @@ router = APIRouter(
     prefix='/auth',
     tags=['Auth']
 )
+
+
+@router.get('/me')
+async def me(request: Request, repository: AuthRepository = Depends(AuthRepository)):
+    token = request.cookies.get(settings.auth.cookie_access)
+
+    try:
+        decode_token = await decode_jwt(token.encode())
+        sub = decode_token['sub']
+    except Exception:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Unauthorized')
+
+    user = await repository.get_user(sub)
+
+    return SUser(**user, roles=decode_token['roles'])
 
 
 @router.post('/register', status_code=201)
