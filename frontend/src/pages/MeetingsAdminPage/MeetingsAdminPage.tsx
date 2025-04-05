@@ -23,7 +23,7 @@ const MeetingsAdminPage = () => {
       <Button className="mb-6" onClick={() => navigate("/meetings/create")}>
         Создать заседание
       </Button>
-      <Tabs defaultValue="account" className="w-[600px]">
+      <Tabs defaultValue="active" className="w-[600px]">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger
             onClick={() => setMeetingStatus("active")}
