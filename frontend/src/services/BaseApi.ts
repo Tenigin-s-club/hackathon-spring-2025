@@ -6,6 +6,7 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BACKEND_API,
     credentials: "include",
+    mode: "cors",
   }),
 
   refetchOnFocus: true,
