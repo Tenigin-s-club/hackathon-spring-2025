@@ -9,6 +9,7 @@ import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 import EmployeesTableAdminPageAsync from "@/pages/EmployeesTablePage/EmployeesTablePage.async";
 import MeetingsAdminPageAsync from "@/pages/MeetingsAdminPage/MeetingsAdminPage.async";
 import CreateMeetingPageAsync from "@/pages/CreateMeetingPage/CreateMeetingPage.async";
+import EmployeePageAsync from "@/pages/EmployeePage/EmployeePage.async";
 
 const authRoutes: RouteObject[] = [
   {
@@ -39,6 +40,10 @@ export const appRoutersConfig = createBrowserRouter([
       {
         path: "/employees",
         element: <EmployeesTableAdminPageAsync />,
+      },
+      {
+        path: "/employees/:id",
+        element: <EmployeePageAsync />,
       },
       {
         path: "/meetings",
