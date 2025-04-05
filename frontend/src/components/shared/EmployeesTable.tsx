@@ -20,18 +20,16 @@ import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
 
-import { UnverifiedUsers } from "@/services/OfficesOperations/OfficesOperations.type";
-
 import ExportEmployeesButton from "./ExportEmployeesButton";
 
 import { useDeleteEmployee } from "@/services/Employees/Employees";
 import { ChartColumnBig, Check, Trash2, X } from "lucide-react";
 import { useSelector } from "react-redux";
-import { VerifiedUser } from "@/services/Employees/types";
+import { UnVerifiedUser, VerifiedUser } from "@/services/Employees/types";
 
 interface Props<TValue> {
-  columns: ColumnDef<UnverifiedUsers | VerifiedUser, TValue>[];
-  data: UnverifiedUsers[] | VerifiedUser[];
+  columns: ColumnDef<UnVerifiedUser | VerifiedUser, TValue>[];
+  data: UnVerifiedUser[] | VerifiedUser[];
   isRequest: boolean;
 }
 
