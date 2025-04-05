@@ -30,83 +30,18 @@ export const loginApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+    }),
   }),
 });
-
-export const logout = async () => {
-  try {
-    return true;
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 export const {
   useLoginMutation: useLogin,
   useRegisterMutation: useRegister,
   useGetMeQuery: useGetMe,
+  useLogoutMutation: useLogout,
 } = loginApi;
-
-// export const loginFetch = async (email: string, password: string) =>
-//   await axiosInstance.post(
-//     "/auth/login",
-//     {
-//       email,
-//       password,
-//     },
-//     { headers: { "Content-Type": "application/json" } }
-//   );
-
-// export const registerFetch = async (
-//   fio: string,
-//   email: string,
-//   password: string
-// ) =>
-//   await axiosInstance.post(
-//     "/auth/register",
-//     {
-//       fio,
-//       email,
-//       password,
-//     },
-//     {
-//       headers: { "Content-Type": "application/json" },
-//     }
-//   );
-
-// export const addOfficesEmployee = async (employee: OfficesUser) => {
-//   try {
-//     const res = await axiosInstance.post("/auth/employee", employee);
-
-//     return res.data;
-//   } catch (e) {
-//     const error = e as AxiosError;
-//     showErrorNotification(error.message);
-//     return false;
-//   }
-// };
-// export const editOfficesEmployee = async (
-//   id: string,
-//   employee: OfficesUser
-// ) => {
-//   try {
-//     const res = await axiosInstance.put(`/auth/employee/${id}`, employee);
-
-//     return res.data;
-//   } catch (e) {
-//     const error = e as AxiosError;
-//     showErrorNotification(error.message);
-//     return false;
-//   }
-// };
-
-// export const deleteEmployee = async (id: string) => {
-//   try {
-//     const res = await axiosInstance.delete(`/auth/employee/${id}`);
-//     return res.data;
-//   } catch (e) {
-//     const error = e as AxiosError;
-//     showErrorNotification(error.message);
-//     return false;
-//   }
-// };

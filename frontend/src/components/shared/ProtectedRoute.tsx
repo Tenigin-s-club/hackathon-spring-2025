@@ -5,7 +5,6 @@ import Container from "../ui/container";
 import { useEffectOnce } from "@/hooks/useEffectOnce";
 import { useGetMe } from "@/services/AuthByEmail/AuthByEmail";
 import { showErrorNotification } from "@/lib/helpers/notification";
-import axios from "axios";
 
 export const ProtectedRoute: FC<PropsWithChildren> = ({ children }) => {
   const { data, isLoading } = useGetMe();
@@ -13,9 +12,6 @@ export const ProtectedRoute: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffectOnce(() => {
-    (async () => {
-      console.log(await axios.get("https://huisos.ru/api/auth/me"));
-    })();
     if (!isLoading && !data) {
       showErrorNotification("Не удалось получить информацию о пользователе.");
       navigate("/login");
