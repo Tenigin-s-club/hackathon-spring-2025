@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import text
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from src.database.config import Base
 
@@ -16,3 +16,6 @@ class Meeting(Base):
     is_internal: Mapped[bool]
     protocol_datetime: Mapped[datetime | None]
     counter: Mapped[str]
+    status: Mapped[str]
+    question = relationship('question')
+    questions: Mapped[list["Question"]] = relationship(back_populates="meeting")

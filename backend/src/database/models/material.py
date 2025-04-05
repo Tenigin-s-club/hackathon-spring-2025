@@ -6,7 +6,7 @@ from sqlalchemy.orm import mapped_column, Mapped
 
 from src.database.config import Base
 
-class Question(Base):
+class Material(Base):
     __tablename__ = 'material'
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text('uuid_generate_v4()'))

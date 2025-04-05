@@ -20,7 +20,7 @@ if config.config_file_name is not None:
 
 config.set_main_option('sqlalchemy.url', settings.database.url + '?async_fallback=True')
 
-# add your models's MetaData object here
+# add your schemas's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata

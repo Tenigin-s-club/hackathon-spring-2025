@@ -3,16 +3,14 @@ import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  UnverifiedUsers,
-  VerifiedUsers,
-} from "@/services/OfficesOperations/OfficesOperations.type";
-import { useCallback, useEffect, useState } from "react";
-import {
-  getVerEmployees,
-  getUnVerEmployees,
-} from "@/services/OfficesOperations/OfficesOperations";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UnverifiedUsers } from "@/services/OfficesOperations/OfficesOperations.type";
+import {
+  useGetUnVerEmployees,
+  useGetVerifiedEmployees,
+} from "@/services/Employees/Employees";
+import Loader from "@/components/shared/Loader/Loader";
 
 const columnsUnVer: ColumnDef<UnverifiedUsers>[] = [
   {
@@ -63,21 +61,11 @@ const columnsVer: ColumnDef<UnverifiedUsers>[] = [
 ];
 
 const EmployeesTableAdminPage = () => {
-  const [verEmployeesData, setVerEmployeesData] = useState<VerifiedUsers[]>([]);
-  const [unVerEmployeesData, setUnVerEmployeesData] = useState<
-    UnverifiedUsers[]
-  >([]);
-
-  const updateData = useCallback(async () => {
-    const dataVer = await getVerEmployees();
-    setVerEmployeesData(dataVer);
-    const dataUnver = await getUnVerEmployees();
-    setUnVerEmployeesData(dataUnver);
-  }, []);
-
-  useEffect(() => {
-    updateData();
-  }, [updateData]);
+  const { data: unVerEmployees, isLoading } = useGetUnVerEmployees();
+  const { data: verifiedEmployees } = useGetVerifiedEmployees();
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <Container>
       <Tabs defaultValue="ver" className="">
@@ -86,18 +74,10 @@ const EmployeesTableAdminPage = () => {
           <TabsTrigger value="unver">Заявки</TabsTrigger>
         </TabsList>
         <TabsContent value="ver">
-          <EmployeesTable
-            updateData={updateData}
-            columns={columnsVer}
-            data={verEmployeesData}
-          />
+          <EmployeesTable columns={columnsVer} data={verifiedEmployees || []} />
         </TabsContent>
         <TabsContent value="unver">
-          <EmployeesTable
-            updateData={updateData}
-            columns={columnsUnVer}
-            data={unVerEmployeesData}
-          />
+          <EmployeesTable columns={columnsUnVer} data={unVerEmployees || []} />
         </TabsContent>
       </Tabs>
     </Container>

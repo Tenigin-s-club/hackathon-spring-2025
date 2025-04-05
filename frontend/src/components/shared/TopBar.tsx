@@ -3,12 +3,14 @@ import { Button } from "../ui/button";
 import { Users, House } from "lucide-react";
 import LogoIcon from "@/assets/logo.svg";
 import { useSelector } from "react-redux";
-import { getUser } from "@/store/ui/selectors";
+import { showErrorNotification } from "@/lib/helpers/notification";
+import { logout } from "@/services/AuthByEmail/AuthByEmail";
+import { User } from "@/services/User/types";
 
 const TopBar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const user = useSelector(getUser);
+  const user = useSelector((state: { user: User | null }) => state.user);
 
   return (
     <div className="justify-between p-4 w-full items-center flex ">
@@ -55,7 +57,14 @@ const TopBar = () => {
       <Button
         variant="secondary"
         className="bg-red-500 text-white hover:bg-red-700"
-        onClick={() => {}}
+        onClick={async () => {
+          try {
+            await logout();
+            navigate("/login");
+          } catch {
+            showErrorNotification("Не удалось выйти из аккаунта");
+          }
+        }}
       >
         Выйти
       </Button>

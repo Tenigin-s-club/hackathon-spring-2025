@@ -1,8 +1,7 @@
-import { urls } from "@/lib/constants/urls";
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: urls.api,
+  baseURL: import.meta.env.VITE_BACKEND_API,
 });
 
 axiosInstance.interceptors.request.use(

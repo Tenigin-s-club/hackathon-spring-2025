@@ -24,3 +24,4 @@ react-figma-miro-canvas-part-3
 *.njsproj
 *.sln
 *.sw?
+.env

@@ -8,6 +8,7 @@ import RegisterPageAsync from "@/pages/RegisterPage/RegisterPage.async";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 import EmployeesTableAdminPageAsync from "@/pages/EmployeesTablePage/EmployeesTablePage.async";
 import MeetingsAdminPageAsync from "@/pages/MeetingsAdminPage/MeetingsAdminPage.async";
+import CreateMeetingPageAsync from "@/pages/CreateMeetingPage/CreateMeetingPage.async";
 
 const authRoutes: RouteObject[] = [
   {
@@ -42,6 +43,10 @@ export const appRoutersConfig = createBrowserRouter([
       {
         path: "/meetings",
         element: <MeetingsAdminPageAsync />,
+      },
+      {
+        path: "/meetings/create",
+        element: <CreateMeetingPageAsync />,
       },
     ],
   },
