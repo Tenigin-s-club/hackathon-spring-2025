@@ -16,7 +16,6 @@ class Meeting(Base):
     is_internal: Mapped[bool]
     protocol_datetime: Mapped[datetime | None]
     counter: Mapped[str]
-    status: Mapped[str]
     questions: Mapped[list["Question"]] = relationship(back_populates="meeting")
     users: Mapped[list["User"]] = relationship(secondary="user_meeting", back_populates="meetings", viewonly=True)
     user_associations: Mapped[list["UserMeeting"]] = relationship(back_populates="meeting")

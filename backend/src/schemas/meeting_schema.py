@@ -19,7 +19,6 @@ class SShortlyMeeting(BaseModel):
     place: str
     is_internal: bool
     protocol_datetime: datetime | None
-    status: str
 
 
 class SVoter(BaseModel):
