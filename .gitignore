@@ -3,3 +3,4 @@
 .venv
 /backend/.idea
 vanv
+/frontend/node_modules

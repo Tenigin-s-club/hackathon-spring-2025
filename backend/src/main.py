@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from uuid import UUID
 
+from src.router import routers_list
 
 app = FastAPI(root_path='/api')
 app.add_middleware(
@@ -14,6 +15,9 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+for router in routers_list:
+    app.include_router(router)
 
 
 class SRegister(BaseModel):
@@ -49,25 +53,7 @@ class SVote(BaseModel):
     choice: int
 
 
-@app.post('/auth/register', status_code=status.HTTP_201_CREATED)
-def register(response: Response, data: SRegister):
-    response.set_cookie('refresh_token', 'fdopihjsfjssj')
-    response.set_cookie('access_token', 'gpu8vf7df8ydvif')
-    return None
 
-
-@app.post('/auth/refresh')
-def refresh(response: Response):
-    response.set_cookie('refresh_token', '87gfd87vdfu')
-    response.set_cookie('access_token', 'ads7das6d7')
-    return None
-
-
-@app.post('/auth/login', status_code=status.HTTP_200_OK)
-def login(response: Response, data: SRegister):
-    response.set_cookie('refresh_token', '2934tyeuhgrfgev')
-    response.set_cookie('access_token', 'yrf8gv9dfu88uj')
-    return None
 
 
 @app.get('/admin/unverified_users')

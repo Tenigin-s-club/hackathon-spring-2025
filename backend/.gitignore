@@ -1,0 +1,7 @@
+../.idea
+/backend/.venv
+.venv
+/backend/.idea
+venv
+.idea
+**/__pycache__/**
