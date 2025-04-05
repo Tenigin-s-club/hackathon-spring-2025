@@ -17,10 +17,6 @@ class Meeting(Base):
     protocol_datetime: Mapped[datetime | None]
     counter: Mapped[str]
     status: Mapped[str]
-<<<<<<< HEAD
-    # question = relationship('question')
-=======
->>>>>>> bb91018b44011d7347687f8ea587f20e34745e4a
     questions: Mapped[list["Question"]] = relationship(back_populates="meeting")
     users: Mapped[list["User"]] = relationship(secondary="user_meeting", back_populates="meetings", viewonly=True)
     user_associations: Mapped[list["UserMeeting"]] = relationship(back_populates="meeting")
