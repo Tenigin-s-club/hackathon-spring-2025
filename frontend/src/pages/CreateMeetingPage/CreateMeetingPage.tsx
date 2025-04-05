@@ -61,9 +61,12 @@ const CreateMeetingPage = () => {
   return (
     <>
       <Form handleSubmit={handleSubmit} {...form}>
+        <h2 className="text-3xl text-center font-mold my-5">
+          Создание заседания
+        </h2>
         <form className="flex gap-7">
-          <div className="h-full">
-            <div className="max-w-[600px] flex flex-col gap-6 sticky top-11 h-min">
+          <div className="h-full  ">
+            <div className="p-4 rounded-xl border-[1px] border-gray-300 border-solid max-w-[600px] flex flex-col gap-6 sticky top-11 h-min">
               <FormField
                 name={"place"}
                 render={({ field }) => (
