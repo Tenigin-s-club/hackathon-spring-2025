@@ -1,12 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const baseApi = createApi({
-  reducerPath: "baseApi",
+  reducerPath: "userApi",
   tagTypes: ["Employees", "Meetings"],
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BACKEND_API,
     credentials: "include",
-    mode: "cors",
+    prepareHeaders(headers) {
+      headers.set("credentials", "include");
+      return headers;
+    },
   }),
 
   refetchOnFocus: true,
