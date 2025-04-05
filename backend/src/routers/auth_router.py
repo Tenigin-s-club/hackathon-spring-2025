@@ -5,6 +5,7 @@ from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
 from src.models.auth_model import SRegister, SLogin, SUser
 from src.repositories.auth_repository import AuthRepository
+from src.utils.security.decorator import check_roles
 from src.utils.security.password import encode_password, check_password
 from src.utils.security.token import encode as encode_jwt
 from src.utils.security.token import decode as decode_jwt
@@ -17,6 +18,7 @@ router = APIRouter(
 
 
 @router.get('/me')
+@check_roles()
 async def me(request: Request, repository: AuthRepository = Depends(AuthRepository)):
     token = request.cookies.get(settings.auth.cookie_access)
 
