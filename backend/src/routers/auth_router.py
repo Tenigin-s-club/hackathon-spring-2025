@@ -5,6 +5,7 @@ from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
 from src.schemas.auth_schema import SRegister, SLogin, SUser
 from src.repositories.auth_repository import AuthRepository
+from src.utils.security.decorator import check_roles
 from src.utils.security.password import encode_password, check_password
 from src.utils.security.token import encode as encode_jwt
 from src.utils.security.token import decode as decode_jwt
