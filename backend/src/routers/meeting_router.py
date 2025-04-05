@@ -34,7 +34,7 @@ async def get_meeting(id: UUID):
 @router.post('', status_code=status.HTTP_201_CREATED)
 async def create_meeting(data: SInputMeeting):
     meeting_id = await MeetingRepository.create(**data.model_dump())
-    return {'meeting_id': meeting_id}
+    return meeting_id
 
 
 @router.post('/{id}/question', status_code=status.HTTP_201_CREATED)
