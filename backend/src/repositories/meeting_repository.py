@@ -33,4 +33,5 @@ class MeetingRepository:
         async with async_session_factory() as session:
             query = insert(Meeting).values(**values).returning(Meeting.id)
             meeting = await session.execute(query)
+            await session.commit()
             return meeting.scalar()

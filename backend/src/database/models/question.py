@@ -11,8 +11,8 @@ class Question(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=text('uuid_generate_v4()'))
     title: Mapped[str]
-    description: Mapped[str] = mapped_column(default='')
-    solution: Mapped[str]
+    description: Mapped[str]
+    solution: Mapped[str] = mapped_column(default='')
     meeting_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('meeting.id'))
     meeting: Mapped["Meeting"] = relationship(back_populates="questions")
     materials: Mapped[list["Material"]] = relationship(back_populates="question")
