@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
 from uuid import UUID
-from question_schema import SInputQuestion, SOutputQuestion, SCreateQuestion
+from src.schemas.question_schema import SInputQuestion, SOutputQuestion, SCreateQuestion
 
 
 class SInputMeeting(BaseModel):
