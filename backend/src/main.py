@@ -3,16 +3,12 @@ from typing import Callable
 
 from src.config import settings
 from src.utils.security.token import decode as decode_jwt
-from fastapi import FastAPI, status, UploadFile, File, Request
+from fastapi import FastAPI, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from uuid import UUID
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from src.routers import routers_list
-from src.permissions import check_permission
-from src.permissions import ROLE_PERMISSIONS, Permissions
+from src.permissions import ROLE_PERMISSIONS
 
 
 app = FastAPI(root_path='/api')
@@ -42,10 +38,6 @@ async def security_middleware(request: Request, handler: Callable):
 
         token = request.cookies.get(settings.auth.cookie_access)
 
-        if not token:
-            return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
-                                content={'detail': 'Unauthorized'})
-
         try:
             payload = await decode_jwt(token)
             request.state.user_roles = payload.get("roles", [])
@@ -56,8 +48,7 @@ async def security_middleware(request: Request, handler: Callable):
                 request.state.permissions.extend(ROLE_PERMISSIONS.get(role, []))
 
         except Exception:
-            return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
-                                content={'detail': 'Unauthorized'})
+            pass
 
         return await handler(request)
 
