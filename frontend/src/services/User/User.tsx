@@ -3,7 +3,7 @@ import { User } from "./types";
 
 const initialState: User = {
   fio: "",
-  role: ["admin"], //TODO
+  role: [],
   email: "",
 };
 

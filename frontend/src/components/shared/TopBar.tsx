@@ -1,10 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { Users, House, Menu, LogOut } from "lucide-react";
-import LogoIcon from "@/assets/logo.png";
+import { Users, House, Menu, LogOut, Presentation } from "lucide-react";
+import LogoIcon from "@/assets/logo.jpeg";
 import { useSelector } from "react-redux";
 import { showErrorNotification } from "@/lib/helpers/notification";
-import { logout } from "@/services/AuthByEmail/AuthByEmail";
+import { useLogout } from "@/services/AuthByEmail/AuthByEmail";
 import { User } from "@/services/User/types";
 import {
   DropdownMenu,
@@ -17,6 +17,8 @@ import {
 const TopBar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [logout] = useLogout();
+
   const user = useSelector((state: { user: User | null }) => state.user);
 
   return (
@@ -26,7 +28,7 @@ const TopBar = () => {
           <img src={LogoIcon} className="max-w-32" />
         </Link>
         <ul className="items-center justify-center gap-2 flex ">
-          <li>
+          {/* <li>
             <Button
               variant={pathname === `/` ? "default" : "secondary"}
               className="min-w-[150px] w-1/6"
@@ -35,7 +37,7 @@ const TopBar = () => {
               <House />
               Главная
             </Button>
-          </li>
+          </li> */}
           {user && user.role.includes("admin") && (
             <>
               <li>
@@ -44,7 +46,7 @@ const TopBar = () => {
                   className="min-w-[150px] w-1/6"
                   onClick={() => navigate("/meetings")}
                 >
-                  <House />
+                  <Presentation />
                   Заседания
                 </Button>
               </li>
@@ -100,8 +102,7 @@ const TopBar = () => {
                 className="cursor-pointer"
                 onClick={() => navigate(`/meetings`)}
               >
-                <House />
-                Заседания
+                <Presentation /> Заседания
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
