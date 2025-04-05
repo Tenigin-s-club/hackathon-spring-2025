@@ -8,3 +8,8 @@ export const fetchMe = async (): Promise<User | null> =>
       headers: { "Content-Type": "application/json" },
     })
   ).data;
+
+export const fetchLogout = async (): Promise<void> =>
+  await axiosInstance.post("/logout", null, {
+    headers: { "Content-Type": "application/json" },
+  });

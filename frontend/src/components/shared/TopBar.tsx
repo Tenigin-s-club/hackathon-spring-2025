@@ -4,6 +4,8 @@ import { Users, House } from "lucide-react";
 import LogoIcon from "@/assets/logo.svg";
 import { useSelector } from "react-redux";
 import { getUser } from "@/store/ui/selectors";
+import { fetchLogout } from "@/services/User/User";
+import { showErrorNotification } from "@/lib/helpers/notification";
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -55,7 +57,14 @@ const TopBar = () => {
       <Button
         variant="secondary"
         className="bg-red-500 text-white hover:bg-red-700"
-        onClick={() => {}}
+        onClick={async () => {
+          try {
+            await fetchLogout();
+            navigate("/login");
+          } catch {
+            showErrorNotification("Не удалось выйти из аккаунта");
+          }
+        }}
       >
         Выйти
       </Button>
