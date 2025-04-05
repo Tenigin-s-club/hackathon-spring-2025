@@ -3,7 +3,7 @@ import uuid
 
 from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
-from src.models.auth_model import SRegister, SLogin
+from src.schemas.auth_schema import SRegister, SLogin, SUser
 from src.repositories.auth_repository import AuthRepository
 from src.utils.security.password import encode_password, check_password
 from src.utils.security.token import encode as encode_jwt
@@ -16,11 +16,32 @@ router = APIRouter(
 )
 
 
+@router.get('/me')
+async def me(request: Request, repository: AuthRepository = Depends(AuthRepository)):
+    token = request.cookies.get(settings.auth.cookie_access)
+
+    try:
+        decode_token = await decode_jwt(token.encode())
+        sub = decode_token['sub']
+    except Exception:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Unauthorized')
+
+    user = await repository.get_user(sub)
+
+    return SUser(**user, roles=decode_token['roles'])
+
+
 @router.post('/register', status_code=201)
 async def register(data: SRegister, repository: AuthRepository = Depends(AuthRepository)):
     data.password = encode_password(data.password)
     await repository.create_user(data)
 
+    return
+
+
+@router.delete('/delete_account/{id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(id: uuid.UUID, repository: AuthRepository = Depends(AuthRepository)):
+    await repository.delete_user(id)
     return
 
 

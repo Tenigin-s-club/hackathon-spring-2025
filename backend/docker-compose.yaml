@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   db:
@@ -8,8 +8,6 @@ services:
       - .env
     ports:
       - "4545:5432"
-
-
 
   app:
     build:
@@ -22,8 +20,6 @@ services:
       POSTGRES_PORT: 5432
     restart: always
     ports:
-      - "8080:8000"
+      - "8081:8000"
     depends_on:
       - db
-
-
