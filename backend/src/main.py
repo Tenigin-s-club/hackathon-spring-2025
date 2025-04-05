@@ -3,14 +3,15 @@ from typing import Callable
 
 from src.config import settings
 from src.utils.security.token import decode as decode_jwt
-from fastapi import FastAPI, status, UploadFile, File, Request, HTTPException
+from fastapi import FastAPI, status, UploadFile, File, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from uuid import UUID
 
 from src.routers import routers_list
-from src.utils.security.decorator import check_roles
+from src.permissions import check_permission
+from src.permissions import ROLE_PERMISSIONS, Permissions
 
 app = FastAPI(root_path='/api')
 app.add_middleware(
@@ -29,7 +30,6 @@ admin - не может голосовать(может если он еще и 
 guest - может только смотреть, прошедшие
 '''
 
-
 @app.middleware("http")
 async def security_middleware(request: Request, handler: Callable):
     try:
@@ -45,20 +45,26 @@ async def security_middleware(request: Request, handler: Callable):
         if request.url.path in public_paths:
             return await handler(request)
 
-
         token = request.cookies.get(settings.auth.cookie_access)
 
         if not token:
-            return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={'ditail': 'Unauthorized'})
+            return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
+                                content={'detail': 'Unauthorized'})
+
         try:
             payload = await decode_jwt(token)
             request.state.user_roles = payload.get("roles", [])
             request.state.user_id = payload.get("sub")
-        except Exception:
-            return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={'ditail': 'Unauthorized'})
 
-        res =  await handler(request)
-        return res
+            request.state.permissions = []
+            for role in request.state.user_roles:
+                request.state.permissions.extend(ROLE_PERMISSIONS.get(role, []))
+
+        except Exception:
+            return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
+                                content={'detail': 'Unauthorized'})
+
+        return await handler(request)
 
     except Exception:
         return JSONResponse(
@@ -104,8 +110,8 @@ class SVote(BaseModel):
 
 
 @app.get('/admin/unverified_users')
-@check_roles(required_roles=['admin'])
-def get_all_users():
+@check_permission(Permissions.SOSAT)
+async def get_all_users(request: Request):
     return [
         {
             'id': 'o5dgfjljfds',
@@ -121,8 +127,7 @@ def get_all_users():
 
 
 @app.get('/admin/verified_users')
-@check_roles(['admin'])
-def get_all_users(request: Request):
+async def get_all_users(request: Request):
     return [
         {
             'id': 'o5dgfjljfds',

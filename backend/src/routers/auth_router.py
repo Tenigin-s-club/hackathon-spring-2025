@@ -18,7 +18,6 @@ router = APIRouter(
 
 
 @router.get('/me')
-@check_roles()
 async def me(request: Request, repository: AuthRepository = Depends(AuthRepository)):
     token = request.cookies.get(settings.auth.cookie_access)
 
