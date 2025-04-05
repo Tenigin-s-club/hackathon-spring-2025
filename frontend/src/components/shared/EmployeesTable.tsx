@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 
 import { UnverifiedUsers } from "@/services/OfficesOperations/OfficesOperations.type";
 
-import ImportEmployeesButton from "./ImportEmployeesButton";
+import ExportEmployeesButton from "./ExportEmployeesButton";
 
 import { useDeleteEmployee } from "@/services/Employees/Employees";
 import { Settings, Trash2 } from "lucide-react";
@@ -70,7 +70,7 @@ function EmployeesTable<TValue>({ columns, data }: Props<TValue>) {
 
         <div className="flex gap-4">
           <>
-            <ImportEmployeesButton />
+            <ExportEmployeesButton />
           </>
         </div>
       </div>
