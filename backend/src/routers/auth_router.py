@@ -101,5 +101,9 @@ async def refresh(request: Request, response: Response, repository: AuthReposito
     return
 
 
+@router.post('/logout', status_code=204)
+async def logout(response: Response):
+    response.delete_cookie(settings.auth.cookie_access)
+    response.delete_cookie(settings.auth.cookie_refresh)
 
-
+    return
