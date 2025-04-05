@@ -36,11 +36,12 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    login({ email: values.email, password: values.password }).unwrap();
-    // .then(() => navigate("/"))
-    // .catch(() =>
-    //   showErrorNotification("Не удалось войти в аккаунт, попробуйте еще раз.")
-    // );
+    login({ email: values.email, password: values.password })
+      .unwrap()
+      .then(() => navigate("/"))
+      .catch(() =>
+        showErrorNotification("Не удалось войти в аккаунт, попробуйте еще раз.")
+      );
   }
   return (
     <div className="w-96 rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col space-y-1.5 p-6">
