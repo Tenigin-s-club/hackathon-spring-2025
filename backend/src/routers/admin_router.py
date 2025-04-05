@@ -1,8 +1,10 @@
-from fastapi import APIRouter, Request, Depends
+from uuid import UUID
+
+from fastapi import APIRouter, Request, Depends, status
 
 from src.permissions import check_permission, Permissions
 from src.repositories.admin_repository import AdminRepository
-from src.schemas.admin_schema import SUsersBasic
+from src.schemas.admin_schema import SUsersBasic, SConfirm
 
 router = APIRouter(
     prefix='/admin',
@@ -29,36 +31,30 @@ async def get_verification_users(
     users = await repository.get_all_users(True)
 
     return [SUsersBasic(**row) for row in users]
-# @app.get('/admin/verified_users')
-# async def get_all_users(request: Request):
-#     return [
-#         {
-#             'id': 'o5dgfjljfds',
-#             'email': 'i_ebal_egora@dolboeb.ru',
-#             'fio': 'Who Are You',
-#             'role': ['admin']
-#         },
-#         {
-#             'id': 'gdpou0djdifhv',
-#             'email': 'hackathon@pizdec.help',
-#             'fio': 'I Am Gay',
-#             'role': ['member_union', 'member_comitet']
-#         }
-#     ]
-#
-#
-# @app.post('/admin/confirm_user/{id}', status_code=status.HTTP_200_OK)
-# def confirm_user(id: UUID, data: SConfirm):
-#     # change checked = True
-#     return None
-#
-#
-# @app.post('/admin/disconfirm_user/{id}', status_code=status.HTTP_200_OK)
-# def confirm_user(id: UUID):
-#     # DELETE FUCKING ZAYABKA
-#     return None
-#
-#
-# @app.get('/admin/export_users')
-# def export_users():
-#     return None
+
+
+@router.post('/confirm_user/{id}')
+@check_permission(Permissions.MANAGE_USERS)
+async def confirm_user(
+        request: Request,
+        id: UUID,
+        data: SConfirm,
+        repository: AdminRepository = Depends(AdminRepository)
+):
+    await repository.add_roles_user(id, data.roles)
+    return
+
+@router.delete('/disconfirm_user/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@check_permission(Permissions.MANAGE_USERS)
+async def un_confirm_user(
+        request: Request,
+        id: UUID,
+        repository: AdminRepository = Depends(AdminRepository)
+):
+    await repository.delete_user(id)
+    return
+
+@router.get('/admin/export_users')
+@check_permission(Permissions.MANAGE_USERS)
+async def export_users(request: Request):
+    return "sosi huy"

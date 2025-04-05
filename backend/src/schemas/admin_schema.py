@@ -6,3 +6,6 @@ class SUsersBasic(BaseModel):
     id: UUID
     email: str
     fio: str
+
+class SConfirm(BaseModel):
+    roles: list[UUID]
