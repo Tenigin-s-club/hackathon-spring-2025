@@ -7,6 +7,8 @@ from uuid import UUID
 
 class SMaterial(BaseModel):
     url: str
+    # for ORM
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SInputQuestion(BaseModel):
