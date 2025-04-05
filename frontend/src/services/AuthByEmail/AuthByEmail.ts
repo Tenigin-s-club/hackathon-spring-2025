@@ -26,7 +26,7 @@ export const loginApi = baseApi.injectEndpoints({
     getMe: builder.query<User, void>({
       query: () => ({
         url: "/me",
-        method: "POST",
+        method: "GET",
       }),
     }),
   }),

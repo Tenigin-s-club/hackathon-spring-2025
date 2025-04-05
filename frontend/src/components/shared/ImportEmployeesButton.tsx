@@ -1,7 +1,6 @@
 import { showErrorNotification } from "@/lib/helpers/notification";
 import { Button } from "../ui/button";
 import axios from "axios";
-import { urls } from "@/lib/constants/urls";
 import { FormEvent } from "react";
 
 const ImportEmployeesButton = () => {
@@ -11,11 +10,15 @@ const ImportEmployeesButton = () => {
       const formData = new FormData();
       formData.append("file", files.currentTarget.files[0]);
 
-      await axios.post(`${urls.api}auth/load_employees`, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_API}auth/load_employees`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
     } catch (e) {
       showErrorNotification(e as string);
     }

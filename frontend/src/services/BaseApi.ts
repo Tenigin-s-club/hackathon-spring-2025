@@ -1,11 +1,10 @@
-import { urls } from "@/lib/constants/urls";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
   tagTypes: ["Employees"],
   baseQuery: fetchBaseQuery({
-    baseUrl: urls.api,
+    baseUrl: import.meta.env.VITE_BACKEND_API,
   }),
 
   refetchOnFocus: true,
