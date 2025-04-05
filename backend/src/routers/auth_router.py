@@ -39,7 +39,7 @@ async def register(data: SRegister, repository: AuthRepository = Depends(AuthRep
     return
 
 
-@router.delete('/delete_account/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/delete_user/{id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(id: uuid.UUID, repository: AuthRepository = Depends(AuthRepository)):
     await repository.delete_user(id)
     return

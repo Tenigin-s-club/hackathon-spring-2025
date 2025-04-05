@@ -15,3 +15,4 @@ class Question(Base):
     solution: Mapped[str]
     meeting_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('meeting.id'))
     meeting: Mapped["Meeting"] = relationship(back_populates="questions")
+    materials: Mapped[list["Material"]] = relationship(back_populates="question")

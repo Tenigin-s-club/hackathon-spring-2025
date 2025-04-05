@@ -32,10 +32,6 @@ class Auth(BaseModel):
     cookie_access: str = "access-token"
 
 
-
-
-
-
 class Settings(BaseModel):
     database: DataBase = DataBase()
     auth: Auth = Auth()
