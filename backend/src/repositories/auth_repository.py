@@ -3,6 +3,7 @@ import uuid
 from sqlalchemy import insert, select
 
 from src.database.config import async_session_factory
+from src.database.models import Role
 from src.database.models.user_role import UserRole
 from src.models.auth_model import SRegister
 from src.database.models.user import User
@@ -10,6 +11,14 @@ from src.database.models.user import User
 
 class AuthRepository:
     model = User
+
+    async def get_user(self, user_id: uuid.UUID) -> dict:
+        async with async_session_factory() as session:
+            query = select(self.model.id, self.model.email, self.model.fio)
+
+            data = await session.execute(query)
+
+            return data.mappings().first()
 
     async def create_user(self, user: SRegister):
         async with async_session_factory() as session:
@@ -35,10 +44,12 @@ class AuthRepository:
 
             return user_status.scalar()
 
-    @staticmethod
-    async def get_user_roles(user_id: uuid.UUID) -> list[uuid.UUID]:
+
+    async def get_user_roles(self, user_id: uuid.UUID) -> list[str]:
         async with async_session_factory() as session:
-            query = select(UserRole.role_id).where(UserRole.user_id == user_id)
+            query = (select(Role.name)
+                     .join(UserRole, Role.id == UserRole.role_id)
+                     .where(UserRole.user_id == user_id))
 
             role_ids = await session.execute(query)
 
