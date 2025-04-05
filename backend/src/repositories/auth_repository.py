@@ -1,11 +1,11 @@
 import uuid
 
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, delete
 
 from src.database.config import async_session_factory
 from src.database.models import Role
 from src.database.models.user_role import UserRole
-from src.models.auth_model import SRegister
+from src.schemas.auth_schema import SRegister
 from src.database.models.user import User
 
 
@@ -43,6 +43,13 @@ class AuthRepository:
             user_status = await session.execute(query)
 
             return user_status.scalar()
+
+
+    async def delete_user(self, user_id: uuid.UUID):
+        async with async_session_factory() as session:
+            query = delete(self.model).where(self.model.id == user_id)
+            await session.execute(query)
+            await session.commit()
 
 
     async def get_user_roles(self, user_id: uuid.UUID) -> list[str]:

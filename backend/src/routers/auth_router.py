@@ -3,7 +3,7 @@ import uuid
 
 from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
-from src.models.auth_model import SRegister, SLogin, SUser
+from src.schemas.auth_schema import SRegister, SLogin, SUser
 from src.repositories.auth_repository import AuthRepository
 from src.utils.security.password import encode_password, check_password
 from src.utils.security.token import encode as encode_jwt
@@ -36,6 +36,12 @@ async def register(data: SRegister, repository: AuthRepository = Depends(AuthRep
     data.password = encode_password(data.password)
     await repository.create_user(data)
 
+    return
+
+
+@router.delete('/delete_account/{id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(id: uuid.UUID, repository: AuthRepository = Depends(AuthRepository)):
+    await repository.delete_user(id)
     return
 
 
