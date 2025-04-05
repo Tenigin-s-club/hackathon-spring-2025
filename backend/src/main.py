@@ -8,20 +8,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from uuid import UUID
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from src.routers import routers_list
 from src.permissions import check_permission
 from src.permissions import ROLE_PERMISSIONS, Permissions
 
-app = FastAPI(root_path='/api')
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[f'http://localhost:5173', 'http://localhost'],
-    allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
-)
 
+app = FastAPI(root_path='/api')
 for router in routers_list:
     app.include_router(router)
 '''member_union, member_comitet, - только голосует в свей касте 
@@ -30,7 +24,8 @@ admin - не может голосовать(может если он еще и 
 guest - может только смотреть, прошедшие
 '''
 
-@app.middleware("http")
+
+@app.middleware('http')
 async def security_middleware(request: Request, handler: Callable):
     try:
         public_paths = [
@@ -73,141 +68,10 @@ async def security_middleware(request: Request, handler: Callable):
         )
 
 
-class SRegister(BaseModel):
-    email: str
-    fio: str
-    password: str
-
-
-class SLogin(BaseModel):
-    email: str
-    password: str
-
-
-class SConfirm(BaseModel):
-    roles: list[str]
-
-
-class SQuestion(BaseModel):
-    title: str
-    material: UploadFile = File(...)
-
-
-class SMeeting(BaseModel):
-    voting_datetime: datetime
-    place: str
-    is_internal: bool
-    counter: UUID
-    questions: list[SQuestion]
-
-
-class SVote(BaseModel):
-    # -1, 0 and 1
-    choice: int
-
-
-
-
-@app.get('/meetings/')
-def get_all_meetings():
-    # check token
-    return [
-        {
-            'id': 52,
-            'voting_datetime': '2022-02-24T05:00:00Z',
-            'end_datetime': '2022-02-24T12:00:00Z',
-            'place': 'Ростов-На-Дону, площадь Хз, дом 1',
-            # очное ли
-            'is_internal': True,
-            'protocol_datetime': '2022-02-25T05:00:00Z',
-            # active, completed and future
-            'status': 'future',
-        },
-        {
-            'id': 42,
-            'voting_datetime': '2025-02-24T05:00:00Z',
-            'end_datetime': '2022-02-24T12:00:00Z',
-            'place': 'Ростов Великий, площадь Хз, дом 1',
-            # очное ли
-            'is_internal': False,
-            'protocol_datetime': None,
-            'status': 'completed',
-        }
-    ]
-
-
-# сделать норм
-@app.get('/meetings/{id}')
-def get_meeting(id: UUID, status: str):
-    if status not in ['active', 'completed', 'future']:
-        return 'Met Egora is dead'
-    # check token
-    return {
-        'id': id,
-        'voting_datetime': '24.02.2022T05:00Z',
-        'end_datetime': '2022-02-24T12:00:00Z',
-        'place': 'Ростов-На-Дону, площадь Хз, дом 1',
-        # очное ли
-        'is_internal': True,
-        'protocol_datetime': '25.02.2022T00:00Z',
-        'voters': ['Who Are You', 'I Am Gay'],
-        'counter': 'Who Are You',
-        'questions': [
-            {
-                'id': 'gkfghrihry889',
-                'title': 'What do you do?',
-            },
-            {
-                'id': '400u9y0840ig9rir',
-                'title': 'Do you suck big dick?',
-            }
-        ]
-    }
-
-
-@app.get('/meetings/questions/{id}')
-def get_question(id: UUID):
-    # check token, is ended
-    return {
-        'id': id,
-        'title': 'What do you do?',
-        'solution': 'Idk, pls help me, i want to sleep',
-        'materials': [
-            {
-                'title': 'idk.docx',
-                'url': 'https://yandex.ru'
-            },
-            {
-                'title': 'wtf.docx',
-                'url': 'https://google.com'
-            },
-        ]
-    }
-
-
-@app.post('/meetings/', status_code=status.HTTP_201_CREATED)
-def create_meeting(data: SMeeting):
-    return {
-        'id': 42,
-        'voting_datetime': '2025-02-24T05:00:00Z',
-        'end_datetime': '2022-02-24T12:00:00Z',
-        'place': 'Ростов Великий, площадь Хз, дом 1',
-        # очное ли
-        'is_internal': False,
-        'protocol_datetime': None,
-        'questions': 69
-    }
-
-
-# переголосование?????
-@app.post('/meetings/questions/{id}', status_code=status.HTTP_201_CREATED)
-def vote(status: SVote):
-    if status['choice'] not in [-1, 0, 1]:
-        return 'Egor idi nahui'
-    return None
-
-
-@app.post('/meetings/{id}/sign', status_code=status.HTTP_201_CREATED)
-def sign_meeting(id: UUID):
-    # check role
-    return None
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[f'http://localhost:5173', 'http://localhost'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)

@@ -1,14 +1,14 @@
 import Container from "@/components/ui/container";
 
-import { Card, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetMeetings } from "@/services/Meetings/Meetings";
 import { useState } from "react";
 import { MeetingStatus } from "@/services/Meetings/types";
-import { Loader } from "lucide-react";
+
 import MeetingCard from "@/components/shared/MeetingCard";
+import Loader from "@/components/shared/Loader/Loader";
 
 const MeetingsAdminPage = () => {
   const [meetingStatus, setMeetingStatus] = useState<MeetingStatus>("active");
@@ -16,7 +16,11 @@ const MeetingsAdminPage = () => {
   const navigate = useNavigate();
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <Container>
+        <Loader />
+      </Container>
+    );
   }
 
   return (
@@ -24,8 +28,8 @@ const MeetingsAdminPage = () => {
       <Button className="mb-6" onClick={() => navigate("/meetings/create")}>
         Создать заседание
       </Button>
-      <Tabs defaultValue="active" className="w-full">
-        <TabsList className="grid max-w-[600px]  grid-cols-3">
+      <Tabs defaultValue={meetingStatus} className="w-full">
+        <TabsList className="grid max-w-[600px] grid-cols-3 ">
           <TabsTrigger
             onClick={() => setMeetingStatus("active")}
             value="active"
@@ -46,7 +50,7 @@ const MeetingsAdminPage = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value={meetingStatus}>
-          <ul className="grid grid-cols-3 gap-4">
+          <ul className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1 ">
             {data?.map((el) => (
               <MeetingCard status={meetingStatus} {...el} />
             ))}

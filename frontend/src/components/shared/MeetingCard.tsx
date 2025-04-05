@@ -1,14 +1,9 @@
 import { Meeting, MeetingStatus } from "@/services/Meetings/types";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
 import { fullDateRuFormat } from "@/lib/helpers/date";
+import { useNavigate } from "react-router-dom";
 
 interface Props extends Meeting {
   status: MeetingStatus;
@@ -22,8 +17,12 @@ const MeetingCard = ({
   voting_datetime,
   end_datetime,
 }: Props) => {
+  const navigate = useNavigate();
   return (
-    <Card>
+    <Card
+      className="cursor-pointer hover:scale-[102%] hover:shadow-md"
+      onClick={() => navigate(`/meeting/${id}`)}
+    >
       <CardHeader>
         <CardTitle>Заседание №: {id}</CardTitle>
       </CardHeader>

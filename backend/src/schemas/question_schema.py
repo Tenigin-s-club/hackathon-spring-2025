@@ -11,20 +11,6 @@ class SMaterial(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class SInputQuestion(BaseModel):
-    title: str
-    description: str
-    solution: str
-    materials: Annotated[list[UploadFile], File(...)]
-
-
-class SCreateQuestion(BaseModel):
-    title: str
-    description: str
-    solution: str
-    materials: list[str]
-
-
 class SOutputQuestion(BaseModel):
     id: UUID
     title: str

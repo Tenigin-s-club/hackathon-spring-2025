@@ -31,22 +31,6 @@ class MeetingRepository:
     @staticmethod
     async def create(**values) -> None:
         async with async_session_factory() as session:
-            questions = values.pop('questions')
             query = insert(Meeting).values(**values).returning(Meeting.id)
             meeting = await session.execute(query)
-            meeting_id = meeting.scalar()
-            for question in questions:
-                query = insert(Question).values(
-                    meeting_id=meeting_id,
-                    **question.model_dump(exclude={'materials'})
-                ).returning(Question.id)
-                created_question = await session.execute(query)
-                question_id = created_question.scalar()
-                for material in question.materials:
-                    query = insert(Material).values(
-                        question_id=question_id,
-                        url=material
-                    )
-                    await session.execute(query)
-            await session.commit()
-            return meeting_id
+            return meeting.scalar()

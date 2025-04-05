@@ -11,7 +11,7 @@ export const ProtectedRoute: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffectOnce(() => {
-    // if (!isLoading && !data) navigate("/login"); TODO
+    if (!isLoading && !data) navigate("/login");
   });
 
   if (isLoading) {

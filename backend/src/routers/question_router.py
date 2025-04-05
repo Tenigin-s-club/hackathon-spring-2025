@@ -19,7 +19,7 @@ async def get_question(id: UUID):
 
 
 # переголосование?????
-@router.post('/questions/{id}', status_code=status.HTTP_201_CREATED)
+@router.post('/vote/{id}', status_code=status.HTTP_201_CREATED)
 def vote(status: SVote):
     if status['choice'] not in [-1, 0, 1]:
         return 'Egor idi nahui'
