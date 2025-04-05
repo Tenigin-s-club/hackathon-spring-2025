@@ -15,6 +15,10 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import Title from "../ui/title";
 import { registerFetch } from "@/services/AuthByEmail/AuthByEmail";
+import {
+  showErrorNotification,
+  showSuccessNotification,
+} from "@/lib/helpers/notification";
 
 const formSchema = z.object({
   email: z.string().email({ message: "incorrect email" }),
@@ -48,12 +52,19 @@ const RegisterForm = () => {
     email,
     password,
   }: z.infer<typeof formSchema>) {
-    const res = await registerFetch(
-      `${lastname || ""} ${name || ""} ${middlename || ""}`.trim(),
-      email,
-      password
-    );
-    if (res) navigate("/");
+    try {
+      await registerFetch(
+        `${lastname || ""} ${name || ""} ${middlename || ""}`.trim(),
+        email,
+        password
+      );
+      navigate("/login");
+      showSuccessNotification("Ваш аккаунт отправлен на проверку.");
+    } catch {
+      showErrorNotification(
+        "Не удалось зарегистрироваться, попробуйте еще раз."
+      );
+    }
   }
   return (
     <div className="w-96 rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col space-y-1.5 p-6">

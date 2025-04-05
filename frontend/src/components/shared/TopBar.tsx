@@ -7,8 +7,9 @@ import { getUser } from "@/store/ui/selectors";
 
 const TopBar = () => {
   const navigate = useNavigate();
-  const user = useSelector(getUser);
   const { pathname } = useLocation();
+  const user = useSelector(getUser);
+
   return (
     <div className="justify-between p-4 w-full items-center flex ">
       <Link to="/">
@@ -26,7 +27,7 @@ const TopBar = () => {
             Главная
           </Button>
         </li>
-        {user?.role.includes("admin") && (
+        {user && user.role.includes("admin") && (
           <>
             <li>
               <Button

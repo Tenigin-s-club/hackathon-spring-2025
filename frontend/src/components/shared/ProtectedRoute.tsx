@@ -15,6 +15,7 @@ export const ProtectedRoute: FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const requests = useSelector(getRequests);
+
   useEffectOnce(() => {
     if (!user) dispatch(fetchUser(navigate));
   });

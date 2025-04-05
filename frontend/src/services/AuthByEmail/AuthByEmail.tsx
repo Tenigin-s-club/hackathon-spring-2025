@@ -11,48 +11,32 @@ export const logout = async () => {
   }
 };
 
-export const loginFetch = async (email: string, password: string) => {
-  try {
-    const res = await axiosInstance.post(
-      "/auth/login",
-      {
-        email,
-        password,
-      },
-      { headers: { "Content-Type": "application/json" } }
-    );
-    return res.data;
-  } catch (e) {
-    const error = e as AxiosError;
-    showErrorNotification(error.message);
-    return;
-  }
-};
+export const loginFetch = async (email: string, password: string) =>
+  await axiosInstance.post(
+    "/auth/login",
+    {
+      email,
+      password,
+    },
+    { headers: { "Content-Type": "application/json" } }
+  );
+
 export const registerFetch = async (
   fio: string,
   email: string,
   password: string
-) => {
-  try {
-    const res = await axiosInstance.post(
-      "/auth/register",
-      {
-        fio,
-        email,
-        password,
-        team: Math.floor(Math.random() * 100_000_000) + "",
-      },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    localStorage.setItem("access_token", res.data["token"]);
-  } catch (e) {
-    const error = e as AxiosError;
-    showErrorNotification(error.message);
-    return false;
-  }
-};
+) =>
+  await axiosInstance.post(
+    "/auth/register",
+    {
+      fio,
+      email,
+      password,
+    },
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 
 export const addOfficesEmployee = async (employee: OfficesUser) => {
   try {
