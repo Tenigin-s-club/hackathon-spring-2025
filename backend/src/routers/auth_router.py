@@ -3,11 +3,11 @@ import uuid
 
 from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
 
-from src.model.auth_model import SRegister, SLogin
-from src.repository.auth_repository import AuthRepository
-from src.util.security.password import encode_password, check_password
-from src.util.security.token import encode as encode_jwt
-from src.util.security.token import decode as decode_jwt
+from src.models.auth_model import SRegister, SLogin
+from src.repositories.auth_repository import AuthRepository
+from src.utils.security.password import encode_password, check_password
+from src.utils.security.token import encode as encode_jwt
+from src.utils.security.token import decode as decode_jwt
 from src.config import settings
 
 router = APIRouter(

@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from uuid import UUID
 
-from src.router import routers_list
+from src.routers import routers_list
 
 app = FastAPI(root_path='/api')
 app.add_middleware(

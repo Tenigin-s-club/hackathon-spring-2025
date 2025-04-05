@@ -3,9 +3,9 @@ import uuid
 from sqlalchemy import insert, select
 
 from src.database.config import async_session_factory
-from src.database.model.user_role import UserRole
-from src.model.auth_model import SRegister
-from src.database.model.user import User
+from src.database.models.user_role import UserRole
+from src.models.auth_model import SRegister
+from src.database.models.user import User
 
 
 class AuthRepository:
