@@ -38,10 +38,10 @@ async def create_meeting(data: SInputMeeting):
 
 
 @router.post('/{id}/question', status_code=status.HTTP_201_CREATED)
-async def create_question(id: UUID, title: str = Form(), description: str = Form(), materials: list[UploadFile] = File(...)):
+async def create_question(id: UUID, title: str, description: str, file: list[UploadFile] = File(...)):
     folder_path = 'materials/'
     urls = []
-    for material in materials:
+    for material in file:
         file_path = folder_path + material.filename
         async with aiofiles.open(file_path, 'wb') as file:
             content = await material.read()
