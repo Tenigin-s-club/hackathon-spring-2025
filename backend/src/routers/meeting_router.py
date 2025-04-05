@@ -38,7 +38,7 @@ async def create_meeting(data: SInputMeeting):
 
 
 @router.post('/{id}/question', status_code=status.HTTP_201_CREATED)
-async def create_meeting(title: str = Form(), description: str = Form(), materials: list[UploadFile] = File(...)):
+async def create_question(id: UUID, title: str = Form(), description: str = Form(), materials: list[UploadFile] = File(...)):
     folder_path = 'materials/'
     urls = []
     for material in materials:
@@ -47,7 +47,7 @@ async def create_meeting(title: str = Form(), description: str = Form(), materia
             content = await material.read()
             await file.write(content)
         urls.append(file_path)
-    await QuestionsRepository.create(title=title, description=description, materials=urls)
+    await QuestionsRepository.create(meeting_id=id, title=title, description=description, materials=urls)
 
 
 @router.post('/{id}/sign', status_code=status.HTTP_201_CREATED)
