@@ -5,6 +5,7 @@ export const baseApi = createApi({
   tagTypes: ["Employees"],
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BACKEND_API,
+    credentials: "include",
   }),
 
   refetchOnFocus: true,

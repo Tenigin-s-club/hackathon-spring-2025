@@ -1,11 +1,5 @@
 import { Meeting, MeetingStatus } from "@/services/Meetings/types";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
 import { fullDateRuFormat } from "@/lib/helpers/date";

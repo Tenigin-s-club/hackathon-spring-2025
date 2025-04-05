@@ -65,66 +65,33 @@ const CreateMeetingPage = () => {
   return (
     <>
       <Form {...form}>
-        <h2 className="text-[36px] font-bold">Создание заседания</h2>
+        <h2 className="text-4xl font-bold text-center mt-4 mb-6">
+          Создание заседания
+        </h2>
         <form className="flex gap-7">
-          <div className="">
-            <div className="max-w-[600px] flex flex-col gap-6 sticky top-5 h-min">
-              <h2 className="text-[28px] font-semibold">Основная информация</h2>
+          <div className="border-[1px] border-gray-300 p-4 rounded-xl  max-w-[600px] flex flex-col gap-6 sticky top-5 h-min">
+            <h2 className="text-2xl font-semibold">Основная информация</h2>
+            <FormField
+              name={"place"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Место подведения итогов</FormLabel>
+                  <FormControl>
+                    <Input placeholder="г. Ростов-на-Дону" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-6">
               <FormField
-                name={"place"}
+                name={"voting_datetime"}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Место подведения итогов</FormLabel>
+                    <FormLabel>Начало голосования</FormLabel>
                     <FormControl>
-                      <Input placeholder="г. Ростов-на-Дону" {...field} />
-                    </FormControl>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex gap-6">
-                <FormField
-                  name={"voting_datetime"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Начало голосования</FormLabel>
-                      <FormControl>
-                        <DateTimePicker {...field} />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  name={"end_datetime"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Окончание голосования</FormLabel>
-                      <FormControl>
-                        <DateTimePicker {...field} />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                name={"is_internal"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Формат голосования</FormLabel>
-                    <FormControl>
-                      <div className="flex">
-                        <p className="mr-2">Заочное</p>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                        <p className="ml-2">Очно-заочное (с применением ВКС)</p>
-                      </div>
+                      <DateTimePicker {...field} />
                     </FormControl>
 
                     <FormMessage />
@@ -132,44 +99,75 @@ const CreateMeetingPage = () => {
                 )}
               />
               <FormField
-                name="counter"
+                name={"end_datetime"}
                 render={({ field }) => (
                   <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder={"Выбрать подсчитывающего..."}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {users.map((el) => (
-                          <SelectItem value={el.id} key={el.id}>
-                            {el.fio}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <FormLabel>Окончание голосования</FormLabel>
+                    <FormControl>
+                      <DateTimePicker {...field} />
+                    </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-              <Button
-                onClick={() => {
-                  form.handleSubmit((meeting) => onSubmit(meeting))();
-                }}
-                type="button"
-              >
-                Создать
-              </Button>
             </div>
+            <FormField
+              name={"is_internal"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Формат голосования</FormLabel>
+                  <FormControl>
+                    <div className="flex">
+                      <p className="mr-2">Заочное</p>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                      <p className="ml-2">Очно-заочное (с применением ВКС)</p>
+                    </div>
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="counter"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={"Выбрать подсчитывающего..."} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {users.map((el) => (
+                        <SelectItem value={el.id} key={el.id}>
+                          {el.fio}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              onClick={() => {
+                form.handleSubmit((meeting) => onSubmit(meeting))();
+              }}
+              type="button"
+            >
+              Создать
+            </Button>
           </div>
 
           <Accordion type="single" collapsible className="w-full">
-            <h2 className="text-[28px] font-semibold mb-3">
+            <h2 className="text-2xl font-semibold mb-3">
               Вопросы на повестку дня
             </h2>
             {form.getValues()?.questions?.map((el, index) => (
