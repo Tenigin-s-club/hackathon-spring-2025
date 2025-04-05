@@ -15,6 +15,7 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import Title from "../ui/title";
 import { loginFetch } from "@/services/AuthByEmail/AuthByEmail";
+import { showErrorNotification } from "@/lib/helpers/notification";
 
 const formSchema = z.object({
   email: z.string().email({ message: "incorrect email" }),
@@ -35,8 +36,13 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await loginFetch(values.email, values.password);
-    if (res) navigate("/");
+    try {
+      await loginFetch(values.email, values.password);
+      navigate("/");
+    } catch (e) {
+      showErrorNotification("Не удалось войти в аккаунт, попробуйте еще раз.");
+      console.log(e);
+    }
   }
   return (
     <div className="w-96 rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col space-y-1.5 p-6">

@@ -1,12 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
+// import { configureStore } from "@reduxjs/toolkit";
 
 // import {IErrorResponse} from '../types/ErrorResponse';
 
 // import {filtersSlice} from './slices/filters';
 
 // import {userReducer} from '@/entities/User/model/slice/UserSlice';
-import { baseApi } from "./BaseApi";
-import { userApi } from "./User/User";
 
 // const rtkQueryErrorLogger: Middleware = () => next => action => {
 //   const typedAction = action as PayloadAction<IErrorResponse>;
@@ -32,15 +30,15 @@ import { userApi } from "./User/User";
 //   return next(action);
 // };
 
-export const store = configureStore({
-  reducer: {
-    [baseApi.reducerPath]: baseApi.reducer,
-    user: userApi.reducer,
-    // [filtersSlice.name]: filtersSlice.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(baseApi.middleware),
-});
+// export const store = configureStore({
+//   reducer: {
+//     [baseApi.reducerPath]: baseApi.reducer,
+//     user: userApi.reducer,
+//     // [filtersSlice.name]: filtersSlice.reducer,
+//   },
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware().concat(baseApi.middleware),
+// });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// export type RootState = ReturnType<typeof store.getState>;
+// export type AppDispatch = typeof store.dispatch;
