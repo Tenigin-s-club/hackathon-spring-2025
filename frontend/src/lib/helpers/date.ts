@@ -10,7 +10,7 @@ export const formatDate = (date: dayjs.ConfigType, locale: string) => {
 };
 
 export const fullDateFormat = "YYYY-MM-DD";
-export const fullDateRuFormat = "DD.MM.YYYY";
+export const fullDateRuFormat = "d.MM.yy";
 export const MonthFormat = "D MMMM, dd";
 export const ShortMonthFormat = "D MMM, dd";
 export const timeFormat = "HH:mm";
