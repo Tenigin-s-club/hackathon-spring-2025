@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get('/')
+@router.get('')
 async def get_all_meetings(status: str):
     if status not in ['active', 'completed', 'future']:
         # сделать норм ошибку
@@ -30,7 +30,7 @@ async def get_meeting(id: UUID):
     return result
 
 
-@router.post('/', status_code=status.HTTP_201_CREATED)
+@router.post('', status_code=status.HTTP_201_CREATED)
 async def create_meeting(data: SInputMeeting):
     meeting = SCreateMeeting(questions=[], **data.model_dump(exclude={'questions'}))
 
