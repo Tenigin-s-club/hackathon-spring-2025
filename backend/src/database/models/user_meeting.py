@@ -12,4 +12,4 @@ class UserRole(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('user.id'))
-    role_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('role.id'))
+    meeting_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('meeting.id'))
