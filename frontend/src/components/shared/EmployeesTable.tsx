@@ -18,38 +18,25 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
-import { MonitorCog, PenLine, Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-import {
-  addOfficesEmployee,
-  deleteEmployee,
-  editOfficesEmployee,
-} from "@/services/AuthByEmail/AuthByEmail";
-import {
-  UnverifiedUsers,
-  OfficesUser,
-} from "@/services/OfficesOperations/OfficesOperations.type";
-import { Button } from "../ui/button";
-import AddBlock from "./AddBlock";
-import { useParams } from "react-router-dom";
-import { addEmployeeForm } from "@/lib/constants/forms";
+import { UnverifiedUsers } from "@/services/OfficesOperations/OfficesOperations.type";
+
 import ImportEmployeesButton from "./ImportEmployeesButton";
-import EditBlock from "./EditBlock";
-import { useSelector } from "react-redux";
-import { getUser } from "@/store/ui/selectors";
+
+import { useDeleteEmployee } from "@/services/Employees/Employees";
+import { Settings, Trash2 } from "lucide-react";
 
 interface Props<TValue> {
   columns: ColumnDef<UnverifiedUsers, TValue>[];
   data: UnverifiedUsers[];
-  updateData: () => void;
 }
 
-function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
+function EmployeesTable<TValue>({ columns, data }: Props<TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [deleteEmployee] = useDeleteEmployee();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const { id } = useParams();
-  const user = useSelector(getUser);
+  const user = { role: ["admin"] };
   const table = useReactTable({
     data,
     columns,
@@ -66,23 +53,6 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
 
   const deleteFunc = async (id: string) => {
     await deleteEmployee(id);
-    updateData();
-  };
-
-  const addEmployeeFunc = async (values: Omit<OfficesUser, "office_id">) => {
-    return addOfficesEmployee({
-      ...values,
-      office_id: id || "",
-    });
-  };
-  const editEmployeeFunc = async (
-    employeeId: string | number,
-    values: Omit<OfficesUser, "office_id">
-  ) => {
-    return editOfficesEmployee(String(employeeId), {
-      ...values,
-      office_id: id || "",
-    });
   };
 
   return (
@@ -99,18 +69,6 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
 
         <div className="flex gap-4">
           <>
-            <AddBlock
-              updateData={updateData}
-              trigger={
-                <Button>
-                  <Plus />
-                  Добавить сотрудника
-                </Button>
-              }
-              formData={addEmployeeForm}
-              formTitle={"Сотрудник"}
-              addFunc={addEmployeeFunc}
-            />
             <ImportEmployeesButton />
           </>
         </div>
@@ -153,20 +111,6 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
 
                   {user?.role.includes("admin") ? (
                     <TableCell className="flex items-center justify-between gap-2">
-                      <EditBlock
-                        trigger={
-                          <PenLine color="#3B82F6" className="cursor-pointer" />
-                        }
-                        formData={addEmployeeForm}
-                        formTitle="Сотрудник"
-                        initialData={{
-                          fio: data[id].fio,
-                          email: data[id].email,
-                        }}
-                        itemId={data[id].id}
-                        editFunc={editEmployeeFunc}
-                        updateData={updateData}
-                      />
                       <Trash2
                         color="#DC2626"
                         className="cursor-pointer"
@@ -175,8 +119,7 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
                     </TableCell>
                   ) : (
                     <TableCell className="opacity-40 flex items-center justify-between gap-2">
-                      <MonitorCog />
-                      <PenLine color="#3B82F6" />
+                      <Settings />
                       <Trash2 color="#DC2626" />
                     </TableCell>
                   )}

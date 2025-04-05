@@ -3,7 +3,6 @@ import OfficeCard from "@/components/shared/OfficeCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Title from "@/components/ui/title";
-import axiosInstance from "@/lib/config/ApiConfig/ApiConfig";
 import { addOfficeForm } from "@/lib/constants/forms";
 import { addOffice } from "@/services/OfficesOperations/OfficesOperations";
 import { Office } from "@/services/OfficesOperations/OfficesOperations.type";
@@ -45,29 +44,29 @@ const MainPage = () => {
               </Button>
             )}
             <Button
-              onClick={async () => {
-                try {
-                  const response = await axiosInstance.get("/offices/stats", {
-                    responseType: "arraybuffer",
-                  });
+            // onClick={async () => {
+            //   try {
+            //     const response = await axiosInstance.get("/offices/stats", {
+            //       responseType: "arraybuffer",
+            //     });
 
-                  const blob = new Blob([response.data], {
-                    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                  });
-                  const blobUrl = URL.createObjectURL(blob);
+            //     const blob = new Blob([response.data], {
+            //       type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            //     });
+            //     const blobUrl = URL.createObjectURL(blob);
 
-                  const anchor = document.createElement("a");
-                  anchor.href = blobUrl;
-                  anchor.download = "stats";
-                  document.body.appendChild(anchor);
-                  anchor.click();
-                  document.body.removeChild(anchor);
+            //     const anchor = document.createElement("a");
+            //     anchor.href = blobUrl;
+            //     anchor.download = "stats";
+            //     document.body.appendChild(anchor);
+            //     anchor.click();
+            //     document.body.removeChild(anchor);
 
-                  URL.revokeObjectURL(blobUrl); // Clean up the blob URL
-                } catch (error) {
-                  console.error("Error downloading the file:", error);
-                }
-              }}
+            //     URL.revokeObjectURL(blobUrl); // Clean up the blob URL
+            //   } catch (error) {
+            //     console.error("Error downloading the file:", error);
+            //   }
+            // }}
             >
               <Download /> Статистика
             </Button>

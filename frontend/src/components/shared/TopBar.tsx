@@ -3,12 +3,11 @@ import { Button } from "../ui/button";
 import { Users, House } from "lucide-react";
 import LogoIcon from "@/assets/logo.svg";
 import { useSelector } from "react-redux";
-import { getUser } from "@/store/ui/selectors";
 
 const TopBar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const user = useSelector(getUser);
+  const user = useSelector((state) => state.user);
 
   return (
     <div className="justify-between p-4 w-full items-center flex ">
