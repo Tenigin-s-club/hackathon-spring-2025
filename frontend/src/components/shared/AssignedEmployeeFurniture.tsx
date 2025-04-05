@@ -5,7 +5,7 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import {
   Furniture,
-  OfficesEmployee,
+  UnverifiedUsers,
 } from "@/services/OfficesOperations/OfficesOperations.type";
 import { useCallback, useEffect, useState } from "react";
 import { getOfficesEmployees } from "@/services/OfficesOperations/OfficesOperations";
@@ -28,7 +28,7 @@ export function AssignedEmployeeFurniture({
 //   attachedUser,
 //   deleteAttachedUser,
 Props) {
-  const [employeesData, setEmployeesData] = useState<OfficesEmployee[]>([]);
+  const [employeesData, setEmployeesData] = useState<UnverifiedUsers[]>([]);
   const [search, setSearch] = useState("");
   const { id } = useParams();
 

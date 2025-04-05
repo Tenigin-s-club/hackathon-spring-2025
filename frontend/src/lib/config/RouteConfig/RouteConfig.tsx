@@ -4,8 +4,10 @@ import { createBrowserRouter, RouteObject } from "react-router-dom";
 import AuthPageAsync from "@/pages/AuthPage/AuthPage.async";
 import MainPageAsync from "@/pages/MainPage/MainPage.async";
 import ErrorPage from "@/pages/ErrorPage/ErrorPage";
-import EmployeesTablePageAsync from "@/pages/EmployeesTablePage/EmployeesTablePage.async";
 import RegisterPageAsync from "@/pages/RegisterPage/RegisterPage.async";
+import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
+import EmployeesTableAdminPageAsync from "@/pages/EmployeesTablePage/EmployeesTablePage.async";
+import MeetingsAdminPageAsync from "@/pages/MeetingsAdminPage/MeetingsAdminPage.async";
 
 const authRoutes: RouteObject[] = [
   {
@@ -20,23 +22,13 @@ const authRoutes: RouteObject[] = [
 
 export const appRoutersConfig = createBrowserRouter([
   ...authRoutes,
-  // {
-  //   path: "/",
-  //   element: (
-  //     <ProtectedRoute>
-  //       <Container>
-  //         <div className="w-full flex pt-5">
-  //           <LogoIcon />
-  //         </div>
-  //         <MainPageAsync />
-  //       </Container>
-  //     </ProtectedRoute>
-  //   ),
-  // },
-
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
@@ -45,7 +37,11 @@ export const appRoutersConfig = createBrowserRouter([
       },
       {
         path: "/employees",
-        element: <EmployeesTablePageAsync />,
+        element: <EmployeesTableAdminPageAsync />,
+      },
+      {
+        path: "/meetings",
+        element: <MeetingsAdminPageAsync />,
       },
     ],
   },

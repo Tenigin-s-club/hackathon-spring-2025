@@ -10,13 +10,13 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import {
   Inventory,
-  OfficesEmployee,
+  UnverifiedUsers,
 } from "@/services/OfficesOperations/OfficesOperations.type";
 import { useState } from "react";
 
 interface Props {
   inventory: Inventory;
-  employeesData: OfficesEmployee[];
+  employeesData: UnverifiedUsers[];
   attachedUser: (id: string, inventoryId: number) => void;
   deleteAttachedUser: (inventoryId: number) => void;
 }

@@ -5,23 +5,18 @@ import { Input } from "@/components/ui/input";
 import Title from "@/components/ui/title";
 import axiosInstance from "@/lib/config/ApiConfig/ApiConfig";
 import { addOfficeForm } from "@/lib/constants/forms";
-import {
-  addOffice,
-  getOffices,
-} from "@/services/OfficesOperations/OfficesOperations";
+import { addOffice } from "@/services/OfficesOperations/OfficesOperations";
 import { Office } from "@/services/OfficesOperations/OfficesOperations.type";
 import { Download, Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 const MainPage = () => {
-  const [offices, setOffices] = useState<Office[] | null>(null);
+  const [offices] = useState<Office[] | null>(null);
 
-  const updateData = useCallback(async () => {
-    getOffices().then((data) => data && setOffices(data));
-  }, []);
+  const updateData = useCallback(async () => {}, []);
 
   useEffect(() => {
-    updateData();
+    // updateData();
   }, [updateData]);
   return (
     <div>

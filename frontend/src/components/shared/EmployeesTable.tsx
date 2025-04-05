@@ -27,7 +27,7 @@ import {
   editOfficesEmployee,
 } from "@/services/AuthByEmail/AuthByEmail";
 import {
-  OfficesEmployee,
+  UnverifiedUsers,
   OfficesUser,
 } from "@/services/OfficesOperations/OfficesOperations.type";
 import { Button } from "../ui/button";
@@ -36,10 +36,12 @@ import { useParams } from "react-router-dom";
 import { addEmployeeForm } from "@/lib/constants/forms";
 import ImportEmployeesButton from "./ImportEmployeesButton";
 import EditBlock from "./EditBlock";
+import { useSelector } from "react-redux";
+import { getUser } from "@/store/ui/selectors";
 
 interface Props<TValue> {
-  columns: ColumnDef<OfficesEmployee, TValue>[];
-  data: OfficesEmployee[];
+  columns: ColumnDef<UnverifiedUsers, TValue>[];
+  data: UnverifiedUsers[];
   updateData: () => void;
 }
 
@@ -47,7 +49,7 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const { id } = useParams();
-
+  const user = useSelector(getUser);
   const table = useReactTable({
     data,
     columns,
@@ -96,28 +98,21 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
         />
 
         <div className="flex gap-4">
-          {localStorage.getItem("role") === "admin" ? (
-            <>
-              <AddBlock
-                updateData={updateData}
-                trigger={
-                  <Button>
-                    <Plus />
-                    Добавить сотрудника
-                  </Button>
-                }
-                formData={addEmployeeForm}
-                formTitle={"Сотрудник"}
-                addFunc={addEmployeeFunc}
-              />
-              <ImportEmployeesButton />
-            </>
-          ) : (
-            <Button disabled>
-              <Plus />
-              Добавить сотрудника
-            </Button>
-          )}
+          <>
+            <AddBlock
+              updateData={updateData}
+              trigger={
+                <Button>
+                  <Plus />
+                  Добавить сотрудника
+                </Button>
+              }
+              formData={addEmployeeForm}
+              formTitle={"Сотрудник"}
+              addFunc={addEmployeeFunc}
+            />
+            <ImportEmployeesButton />
+          </>
         </div>
       </div>
       <div className="rounded-md border">
@@ -156,7 +151,7 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
                     </TableCell>
                   ))}
 
-                  {localStorage.getItem("role") === "admin" ? (
+                  {user?.role.includes("admin") ? (
                     <TableCell className="flex items-center justify-between gap-2">
                       <EditBlock
                         trigger={
@@ -166,7 +161,6 @@ function EmployeesTable<TValue>({ columns, data, updateData }: Props<TValue>) {
                         formTitle="Сотрудник"
                         initialData={{
                           fio: data[id].fio,
-                          position: data[id].position,
                           email: data[id].email,
                         }}
                         itemId={data[id].id}

@@ -1,4 +1,4 @@
 import { lazy } from "react";
 
-const EmployeesTablePageAsync = lazy(() => import("./EmployeesTablePage"));
-export default EmployeesTablePageAsync;
+const EmployeesTableAdminPageAsync = lazy(() => import("./EmployeesTablePage"));
+export default EmployeesTableAdminPageAsync;

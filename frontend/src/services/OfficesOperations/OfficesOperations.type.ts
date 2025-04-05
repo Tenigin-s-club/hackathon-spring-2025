@@ -3,14 +3,20 @@ export interface OfficesEmployeeInventory {
   name: string;
 }
 
-export interface OfficesEmployee {
+export interface UnverifiedUsers {
   id: string;
-  fio: string;
-  position: string;
-  place?: string;
   email: string;
-  // то, что на столе
-  inventory?: OfficesEmployeeInventory[];
+  fio: string;
+}
+
+export interface VerifiedUsers extends UnverifiedUsers {
+  role: (
+    | "member_union"
+    | "member_comitet"
+    | "admin"
+    | "secretar"
+    | "corporative_secretar"
+  )[];
 }
 
 export interface OfficesUser {
@@ -22,10 +28,13 @@ export interface OfficesUser {
 }
 
 export interface Office {
-  id?: number;
-  name: string;
-  image?: string;
-  address: string;
+  id: number;
+  voting_datetime: string;
+  end_datetime: string;
+  place: string;
+  is_internal: boolean;
+  protocol_datetime: string;
+  status: "active" | "completed" | "future";
 }
 
 export interface Inventory {

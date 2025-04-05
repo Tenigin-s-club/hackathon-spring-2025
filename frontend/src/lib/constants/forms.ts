@@ -150,11 +150,6 @@ export const addEmployeeForm: FormDataType = {
       defaultValue: "",
     },
     {
-      label: "Должность",
-      type: "position",
-      defaultValue: "",
-    },
-    {
       label: "Почта",
       type: "email",
       defaultValue: "",

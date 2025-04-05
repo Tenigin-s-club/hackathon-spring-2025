@@ -3,12 +3,18 @@ import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { OfficesEmployee } from "@/services/OfficesOperations/OfficesOperations.type";
+import {
+  UnverifiedUsers,
+  VerifiedUsers,
+} from "@/services/OfficesOperations/OfficesOperations.type";
 import { useCallback, useEffect, useState } from "react";
-import { getOfficesEmployees } from "@/services/OfficesOperations/OfficesOperations";
-import { useParams } from "react-router-dom";
+import {
+  getVerEmployees,
+  getUnVerEmployees,
+} from "@/services/OfficesOperations/OfficesOperations";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export const columns: ColumnDef<OfficesEmployee>[] = [
+const columnsUnVer: ColumnDef<UnverifiedUsers>[] = [
   {
     accessorKey: "fio",
     header: ({ column }) => {
@@ -22,14 +28,6 @@ export const columns: ColumnDef<OfficesEmployee>[] = [
         </Button>
       );
     },
-  },
-  {
-    accessorKey: "position",
-    header: "Должность",
-  },
-  {
-    accessorKey: "place",
-    header: "Место",
   },
   {
     accessorKey: "email",
@@ -46,29 +44,64 @@ export const columns: ColumnDef<OfficesEmployee>[] = [
     },
   },
 ];
+const columnsVer: ColumnDef<UnverifiedUsers>[] = [
+  ...columnsUnVer,
+  {
+    accessorKey: "role",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Роль
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+];
 
-const EmployeesTablePage = () => {
-  const [employeesData, setEmployeesData] = useState<OfficesEmployee[]>([]);
-  const { id } = useParams();
+const EmployeesTableAdminPage = () => {
+  const [verEmployeesData, setVerEmployeesData] = useState<VerifiedUsers[]>([]);
+  const [unVerEmployeesData, setUnVerEmployeesData] = useState<
+    UnverifiedUsers[]
+  >([]);
 
   const updateData = useCallback(async () => {
-    getOfficesEmployees(Number(id)).then(
-      (data) => data && setEmployeesData(data)
-    );
-  }, [id]);
+    const dataVer = await getVerEmployees();
+    setVerEmployeesData(dataVer);
+    const dataUnver = await getUnVerEmployees();
+    setUnVerEmployeesData(dataUnver);
+  }, []);
 
   useEffect(() => {
     updateData();
   }, [updateData]);
   return (
     <Container>
-      <EmployeesTable
-        updateData={updateData}
-        columns={columns}
-        data={employeesData}
-      />
+      <Tabs defaultValue="ver" className="">
+        <TabsList className="grid w-full grid-cols-2 max-w-[300px]">
+          <TabsTrigger value="ver">Сотрудники</TabsTrigger>
+          <TabsTrigger value="unver">Заявки</TabsTrigger>
+        </TabsList>
+        <TabsContent value="ver">
+          <EmployeesTable
+            updateData={updateData}
+            columns={columnsVer}
+            data={verEmployeesData}
+          />
+        </TabsContent>
+        <TabsContent value="unver">
+          <EmployeesTable
+            updateData={updateData}
+            columns={columnsUnVer}
+            data={unVerEmployeesData}
+          />
+        </TabsContent>
+      </Tabs>
     </Container>
   );
 };
 
-export default EmployeesTablePage;
+export default EmployeesTableAdminPage;

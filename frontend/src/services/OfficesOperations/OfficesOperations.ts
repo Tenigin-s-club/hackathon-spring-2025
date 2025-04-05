@@ -1,18 +1,35 @@
 import axiosInstance from "@/lib/config/ApiConfig/ApiConfig";
 import { showErrorNotification } from "@/lib/helpers/notification";
 import { AxiosError } from "axios";
-import { Inventory, Office, OfficesEmployee } from "./OfficesOperations.type";
+import {
+  Inventory,
+  Office,
+  UnverifiedUsers,
+  VerifiedUsers,
+} from "./OfficesOperations.type";
 
-export const getOfficesEmployees = async (id: number) => {
+export const getVerEmployees = async () => {
   try {
-    const res = await axiosInstance.get<OfficesEmployee[]>(
-      `/offices/employees/${id}`
+    const res = await axiosInstance.get<VerifiedUsers[]>(
+      `/admin/verified_users`
     );
     return res.data;
   } catch (e) {
     const error = e as AxiosError;
     showErrorNotification(error.message);
-    return false;
+    return [];
+  }
+};
+export const getUnVerEmployees = async () => {
+  try {
+    const res = await axiosInstance.get<UnverifiedUsers[]>(
+      `/admin/unverified_users`
+    );
+    return res.data;
+  } catch (e) {
+    const error = e as AxiosError;
+    showErrorNotification(error.message);
+    return [];
   }
 };
 
@@ -27,9 +44,9 @@ export const deleteOfficesEmployees = async (id: string) => {
   }
 };
 
-export const getOffices = async () => {
+export const getMeetings = async () => {
   try {
-    const res = await axiosInstance.get<Office[]>("/offices/offices");
+    const res = await axiosInstance.get<Office[]>("/meetings");
     return res.data;
   } catch (e) {
     const error = e as AxiosError;
