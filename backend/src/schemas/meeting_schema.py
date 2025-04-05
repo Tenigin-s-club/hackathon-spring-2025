@@ -9,7 +9,7 @@ class SInputMeeting(BaseModel):
     end_datetime: datetime
     place: str
     is_internal: bool
-    counter: UUID
+    counter: str
 
 
 class SShortlyMeeting(BaseModel):
