@@ -14,7 +14,7 @@ class AuthRepository:
 
     async def get_user(self, user_id: uuid.UUID) -> dict:
         async with async_session_factory() as session:
-            query = select(self.model.id, self.model.email, self.model.fio)
+            query = select(self.model.id, self.model.email, self.model.fio).where(self.model.id == user_id)
 
             data = await session.execute(query)
 
