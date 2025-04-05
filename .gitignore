@@ -1,0 +1,6 @@
+.idea
+/backend/.venv
+.venv
+/backend/.idea
+vanv
+/frontend/node_modules
