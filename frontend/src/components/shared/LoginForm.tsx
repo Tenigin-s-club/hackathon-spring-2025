@@ -14,7 +14,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import Title from "../ui/title";
-import { useLogin } from "@/services/AuthByEmail/AuthByEmail";
+import { loginFetch } from "@/services/AuthByEmail/AuthByEmail";
 
 const formSchema = z.object({
   email: z.string().email({ message: "incorrect email" }),
@@ -25,7 +25,6 @@ const formSchema = z.object({
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const [login] = useLogin();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,7 +35,7 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await login({ email: values.email, password: values.password });
+    const res = await loginFetch(values.email, values.password);
     if (res) navigate("/");
   }
   return (

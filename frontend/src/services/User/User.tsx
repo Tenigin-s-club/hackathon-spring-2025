@@ -3,19 +3,17 @@ import axiosInstance from "@/lib/config/ApiConfig/ApiConfig";
 import { AxiosError } from "axios";
 import { showErrorNotification } from "@/lib/helpers/notification";
 import { User } from "./types";
+import { baseApi } from "../BaseApi";
 
-// export const meApi = baseApi.injectEndpoints({
-//   endpoints: (builder) => ({
-//     me: builder.mutation<null, User>({
-//       query: () => ({
-//         url: "api-token-auth/",
-//         method: "GET",
-//       }),
-//     }),
-//   }),
-// });
+export const userApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    me: builder.query<User, void>({
+      query: () => "/me",
+    }),
+  }),
+});
 
-// export const { useMeMutation: useMe } = meApi;
+export const { useMeQuery: useMe } = userApi;
 
 export const meFetch = async (): Promise<User | null> => {
   try {

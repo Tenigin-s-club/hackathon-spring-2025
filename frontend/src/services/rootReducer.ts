@@ -6,6 +6,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 // import {userReducer} from '@/entities/User/model/slice/UserSlice';
 import { baseApi } from "./BaseApi";
+import { userApi } from "./User/User";
 
 // const rtkQueryErrorLogger: Middleware = () => next => action => {
 //   const typedAction = action as PayloadAction<IErrorResponse>;
@@ -34,7 +35,7 @@ import { baseApi } from "./BaseApi";
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
-    // user: userReducer,
+    user: userApi.reducer,
     // [filtersSlice.name]: filtersSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

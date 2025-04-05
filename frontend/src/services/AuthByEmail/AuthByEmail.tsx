@@ -1,23 +1,7 @@
 import axiosInstance from "@/lib/config/ApiConfig/ApiConfig";
-import { baseApi } from "../BaseApi";
-import { ILoginRequest, ILoginResponse } from "./types";
 import { AxiosError } from "axios";
 import { showErrorNotification } from "@/lib/helpers/notification";
 import { OfficesUser } from "../OfficesOperations/OfficesOperations.type";
-
-export const loginApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
-    login: builder.mutation<ILoginResponse, ILoginRequest>({
-      query: (body) => ({
-        url: "api-token-auth/",
-        method: "POST",
-        body,
-      }),
-    }),
-  }),
-});
-
-export const { useLoginMutation: useLogin } = loginApi;
 
 export const logout = async () => {
   try {
@@ -37,13 +21,11 @@ export const loginFetch = async (email: string, password: string) => {
       },
       { headers: { "Content-Type": "application/json" } }
     );
-    localStorage.setItem("access_token", res.data["token"]);
-    localStorage.setItem("role", res.data.role);
-    return res.data["token"];
+    return res.data;
   } catch (e) {
     const error = e as AxiosError;
     showErrorNotification(error.message);
-    return false;
+    return;
   }
 };
 export const registerFetch = async (
