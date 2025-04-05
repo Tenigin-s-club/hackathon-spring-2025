@@ -22,7 +22,6 @@ class Permissions:
 
 
 ROLE_PERMISSIONS = {
-    "pidor": [Permissions.SOSAT],
     "member_union": [
         Permissions.VIEW_OWN_PROFILE,
         Permissions.VIEW_MEETINGS,
