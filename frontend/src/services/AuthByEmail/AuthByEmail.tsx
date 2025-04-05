@@ -21,7 +21,6 @@ export const { useLoginMutation: useLogin } = loginApi;
 
 export const logout = async () => {
   try {
-    localStorage.removeItem("access_token");
     return true;
   } catch (e) {
     console.log(e);
@@ -66,7 +65,6 @@ export const registerFetch = async (
       }
     );
     localStorage.setItem("access_token", res.data["token"]);
-    return res.data["token"];
   } catch (e) {
     const error = e as AxiosError;
     showErrorNotification(error.message);

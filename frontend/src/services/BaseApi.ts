@@ -6,15 +6,6 @@ export const baseApi = createApi({
   tagTypes: ["Report", "DailyReport"],
   baseQuery: fetchBaseQuery({
     baseUrl: urls.api,
-
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("access_token");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
   }),
 
   refetchOnFocus: true,

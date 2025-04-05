@@ -1,20 +1,20 @@
 import Layout from "@/components/shared/layout";
-import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
-import LogoIcon from "@/assets/logo.svg";
 
 import { createBrowserRouter, RouteObject } from "react-router-dom";
-import Container from "@/components/ui/container";
 import AuthPageAsync from "@/pages/AuthPage/AuthPage.async";
 import MainPageAsync from "@/pages/MainPage/MainPage.async";
 import ErrorPage from "@/pages/ErrorPage/ErrorPage";
 import EmployeesTablePageAsync from "@/pages/EmployeesTablePage/EmployeesTablePage.async";
-import InventoriesTablePageAsync from "@/pages/InventoriesTablePage/InventoriesTablePage.async";
-import MapPageAsync from "@/pages/MapPage/MapPage.async";
+import RegisterPageAsync from "@/pages/RegisterPage/RegisterPage.async";
 
 const authRoutes: RouteObject[] = [
   {
     path: "/login",
     element: <AuthPageAsync />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPageAsync />,
   },
 ];
 

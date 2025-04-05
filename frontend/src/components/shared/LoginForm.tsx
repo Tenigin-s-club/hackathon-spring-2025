@@ -42,7 +42,7 @@ const LoginForm = () => {
   return (
     <div className="w-96 rounded-lg border bg-card text-card-foreground shadow-sm flex flex-col space-y-1.5 p-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-4">
           <Title size="sm" text={"Авторизация"} />
           <p>
             Введите свой адрес электронной почты ниже, чтобы войти в свою
@@ -81,6 +81,9 @@ const LoginForm = () => {
           </Button>
         </form>
       </Form>
+      <a className="text-black text-center mx-auto" href={"/register"}>
+        Нет аккаунта? Зарегистрироваться!
+      </a>
     </div>
   );
 };
