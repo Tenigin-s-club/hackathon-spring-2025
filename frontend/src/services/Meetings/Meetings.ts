@@ -7,6 +7,9 @@ export const employeesApi = baseApi.injectEndpoints({
       query: (status) => `/meetings/?status=${status}`,
       providesTags: ["Meetings"],
     }),
+    getMeeting: builder.query<Meeting, string>({
+      query: (id) => `/meetings/${id}`,
+    }),
     addMeeting: builder.mutation<MeetingRequest, Meeting>({
       query: (body) => ({
         url: "/meetings",
@@ -21,4 +24,5 @@ export const employeesApi = baseApi.injectEndpoints({
 export const {
   useGetMeetingsQuery: useGetMeetings,
   useAddMeetingMutation: useAddMeeting,
+  useGetMeetingQuery: useGetMeting,
 } = employeesApi;
