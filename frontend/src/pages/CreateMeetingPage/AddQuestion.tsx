@@ -17,19 +17,19 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export type Question = {
-  materials: FileList;
+  materials: File[]; // вместо FileList | null
   description: string;
   title: string;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const schemaQuestion = z.object({
-  materials: z.instanceof(FileList),
+  materials: z.array(z.instanceof(File)),
   title: z.string({
     message: "Повестка дня обязательный.",
   }),
@@ -40,7 +40,7 @@ interface AddQuestionProps {
   isOpen: boolean;
   onOpenChange: (n: boolean) => void;
   number: number;
-  onSubmit: (title: string, description: string, materials: FileList) => void;
+  onSubmit: (title: string, description: string, materials: File[]) => void;
 }
 const AddQuestion = ({
   onOpenChange,
@@ -49,16 +49,12 @@ const AddQuestion = ({
   onSubmit,
 }: AddQuestionProps) => {
   const form = useForm<z.infer<typeof schemaQuestion>>();
-  const [materials, setMaterials] = useState<FileList | null>(null);
-  useEffect(() => {
-    if (!materials) return;
-    form.setValue("materials", materials);
-  }, [materials, form]);
+  const [materials, setMaterials] = useState<File[]>([]);
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild className="w-full">
-        <Button className="w-full" type="button">
-          Добавить вопрос на повестку дня
+        <Button className="w-full mt-6" type="button">
+          Добавить вопрос
         </Button>
       </DialogTrigger>
       <DialogOverlay />
@@ -68,32 +64,25 @@ const AddQuestion = ({
             <X size={32} />
           </DialogClose>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit((data) =>
-                onSubmit(data.title, data.description, data.materials)
-              )}
-            >
+            <form>
               <h3 className="mb-4 font-semibold text-3xl w-full text-left">
                 Вопрос №{number}
               </h3>
 
-              <div className="grid w-full gap-1.5 mb-5">
-                <Label htmlFor="message">Повестка дня</Label>
-                <FormField
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Вопрос</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Вопрос..." {...field} />
-                      </FormControl>
+              <FormField
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Вопрос</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Вопрос..." {...field} />
+                    </FormControl>
 
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid w-full gap-1.5 mb-5">
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid w-full gap-1.5 mb-5 mt-5">
                 <Label htmlFor="message">Текст сообщения</Label>
                 <Textarea
                   {...form.register("description")}
@@ -101,41 +90,36 @@ const AddQuestion = ({
                   placeholder="Введите сообщение...."
                 />
               </div>
+              <FormLabel>Материалы</FormLabel>
               {materials && (
                 <ol className="flex flex-col gap-2 list-decimal mb-3">
-                  {Array.from({ length: materials.length }).map((_, index) => {
-                    const file = materials.item(index);
-                    if (!file) return;
-                    return (
-                      <li className="flex justify-between">
-                        <p>
-                          {index + 1}. {file.name},{" "}
-                          {((file.size || 0) / 1024).toFixed(1)} КБ
-                        </p>
-                        <Button
-                          type="button"
-                          onClick={() =>
-                            setMaterials(() => {
-                              // if (!prev) return prev;
-                              const newItems = new DataTransfer();
-                              for (let i = 0; i <= materials.length; i++) {
-                                const file = materials.item(i);
-                                if (i === index || !file) continue;
-                                newItems.items.add(file);
-                              }
-                              return newItems.files;
-                            })
-                          }
-                        >
-                          <X />
-                        </Button>
-                      </li>
-                    );
-                  })}
+                  {materials.map((file, index) => (
+                    <li className="flex justify-between">
+                      <p>
+                        {index + 1}. {file.name},{" "}
+                        {((file.size || 0) / 1024).toFixed(1)} КБ
+                      </p>
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          setMaterials((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
+                        <X />
+                      </Button>
+                    </li>
+                  ))}
                 </ol>
               )}
               <Input
-                onChange={(e) => setMaterials(e.target.files)}
+                onChange={(e) =>
+                  setMaterials((prev) => [
+                    ...prev,
+                    ...(e.target.files ? Array.from(e.target.files) : []),
+                  ])
+                }
                 multiple
                 type="file"
                 className="mb-4"
@@ -143,9 +127,14 @@ const AddQuestion = ({
               <Button
                 type="button"
                 onClick={() => {
-                  form.handleSubmit(({ title, materials, description }) =>
-                    onSubmit(title, description, materials)
-                  );
+                  form
+                    .handleSubmit(({ title, description }) =>
+                      onSubmit(title, description, materials)
+                    )()
+                    .then(() => {
+                      setMaterials([]);
+                      form.reset();
+                    });
                 }}
                 className="ml-auto"
               >
