@@ -74,10 +74,18 @@ const EmployeesTableAdminPage = () => {
           <TabsTrigger value="unver">Заявки</TabsTrigger>
         </TabsList>
         <TabsContent value="ver">
-          <EmployeesTable columns={columnsVer} data={verifiedEmployees || []} />
+          <EmployeesTable
+            isRequest={false}
+            columns={columnsVer}
+            data={verifiedEmployees || []}
+          />
         </TabsContent>
         <TabsContent value="unver">
-          <EmployeesTable columns={columnsUnVer} data={unVerEmployees || []} />
+          <EmployeesTable
+            isRequest={true}
+            columns={columnsUnVer}
+            data={unVerEmployees || []}
+          />
         </TabsContent>
       </Tabs>
     </Container>

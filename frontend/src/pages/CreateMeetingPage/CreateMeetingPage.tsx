@@ -39,16 +39,16 @@ const schema = z.object({
   voting_datetime: z.date({ message: "Дата начала голосования обязательная." }),
   end_datetime: z.date({ message: "Дата окончания голосования обязательная." }),
   is_internal: z.boolean({ message: "Поле обязательное" }),
-  counter: z.string({ message: "Обязательно выбрать подсчитывающего голоса." }),
+  counter: z.string(),
   questions: z.array(schemaQuestion),
 });
 
 const CreateMeetingPage = () => {
   const [users, setUsers] = useState<VerifiedUsers[]>([]);
   const [modalAddOpen, setModalAddOpen] = useState(false);
-  const { handleSubmit, ...form } = useForm<z.infer<typeof schema>>({
+  const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: { is_internal: false },
   });
 
   useEffect(() => {
@@ -58,12 +58,18 @@ const CreateMeetingPage = () => {
     })();
   }, []);
 
+  const onSubmit = (values: z.infer<typeof schema>) => {
+    console.log(values);
+  };
+
   return (
     <>
-      <Form handleSubmit={handleSubmit} {...form}>
+      <Form {...form}>
+        <h2 className="text-[36px] font-bold">Создание заседания</h2>
         <form className="flex gap-7">
-          <div className="h-full">
-            <div className="max-w-[600px] flex flex-col gap-6 sticky top-11 h-min">
+          <div className="">
+            <div className="max-w-[600px] flex flex-col gap-6 sticky top-5 h-min">
+              <h2 className="text-[28px] font-semibold">Основная информация</h2>
               <FormField
                 name={"place"}
                 render={({ field }) => (
@@ -105,33 +111,99 @@ const CreateMeetingPage = () => {
                   )}
                 />
               </div>
-              <div className="flex">
-                <p className="mr-2">Заочное</p>
-                <Switch />
-                <p className="ml-2">Очно-заочное (с применением ВКС)</p>
-              </div>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder={"Выбрать подсчитывающего..."} />
-                </SelectTrigger>
-                <SelectContent>
-                  {users.map((el) => (
-                    <SelectItem value={el.id} key={el.id}>
-                      {el.fio}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button>Создать</Button>
+              <FormField
+                name={"is_internal"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Формат голосования</FormLabel>
+                    <FormControl>
+                      <div className="flex">
+                        <p className="mr-2">Заочное</p>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                        <p className="ml-2">Очно-заочное (с применением ВКС)</p>
+                      </div>
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="counter"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={"Выбрать подсчитывающего..."}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {users.map((el) => (
+                          <SelectItem value={el.id} key={el.id}>
+                            {el.fio}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                onClick={() => {
+                  form.handleSubmit((meeting) => onSubmit(meeting))();
+                }}
+                type="button"
+              >
+                Создать
+              </Button>
             </div>
           </div>
+
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>Is it accessible?</AccordionTrigger>
-              <AccordionContent>
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
+            <h2 className="text-[28px] font-semibold mb-3">
+              Вопросы на повестку дня
+            </h2>
+            {form.getValues()?.questions?.map((el, index) => (
+              <AccordionItem
+                key={index + new Date().getTime()}
+                value={`item-${index}`}
+              >
+                <AccordionTrigger>
+                  <h3 className="text-2xl text-justify">
+                    <span className="text-3xl font-bold">#{index + 1}.</span>{" "}
+                    {el.title}
+                  </h3>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <h4 className="font-semibold text-[18px] mb-6">
+                    Описание задачи:{" "}
+                    <span className="text-[#666] text-[15px]">
+                      {el.description}
+                    </span>
+                  </h4>
+                  <h4 className="font-semibold text-[18px] mb-3">Материалы:</h4>
+                  <ol>
+                    {el.materials.map((item, index2) => (
+                      <li>
+                        <a href={URL.createObjectURL(item)}>
+                          {index2 + 1}. {item?.name},{" "}
+                          {((item?.size || 0) / 1024).toFixed(1)} КБ
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
             <AddQuestion
               isOpen={modalAddOpen}
               onOpenChange={setModalAddOpen}
@@ -139,13 +211,15 @@ const CreateMeetingPage = () => {
               onSubmit={(
                 title: string,
                 description: string,
-                materials: FileList
+                materials: File[]
               ) => {
-                console.log(title, description, materials);
-                // form.setValue("questions", [
-                //   ...(form.getValues()?.questions || []),
-                //   question,
-                // ]);
+                console.log(form.getValues());
+                form.setValue("questions", [
+                  ...(form.getValues()?.questions || []),
+                  { title, description, materials },
+                ]);
+
+                setModalAddOpen(false);
               }}
             />
           </Accordion>

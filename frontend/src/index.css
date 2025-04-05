@@ -6,6 +6,32 @@ html {
   scroll-behavior: smooth;
 }
 
+@font-face {
+  font-family: dinBold;
+  src: local, url(/frontend/public/fonts/dinBold.woff2),
+    url(/frontend/public/fonts/dinBold.woff);
+}
+@font-face {
+  font-family: dinLight;
+  src: local, url(/frontend/public/fonts/dinLight.woff2),
+    url(/frontend/public/fonts/dinLight.woff);
+}
+@font-face {
+  font-family: dinMed;
+  src: local, url(/frontend/public/fonts/dinMed.woff2),
+    url(/frontend/public/fonts/dinMed.woff);
+}
+@font-face {
+  font-family: dinReg;
+  src: local, url(/frontend/public/fonts/dinReg.woff2),
+    url(/frontend/public/fonts/dinReg.woff);
+}
+@font-face {
+  font-family: dinThin;
+  src: local, url(/frontend/public/fonts/dinThin.woff2),
+    url(/frontend/public/fonts/dinThin.woff);
+}
+
 @media screen and (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -70,7 +96,7 @@ html {
 }
 
 * {
-  font-family: var(--font-nunito), sans-serif;
+  font-family: dinReg, sans-serif;
 }
 
 .scrollbar::-webkit-scrollbar {
