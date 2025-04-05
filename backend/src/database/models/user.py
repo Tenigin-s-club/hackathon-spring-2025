@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy import text
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from src.database.config import Base
 
@@ -14,3 +14,5 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
     password: Mapped[bytes]
     checked: Mapped[bool] = mapped_column(default=False)
+    meetings: Mapped[list["Meeting"]] = relationship(secondary="user_meeting", back_populates="users", viewonly=True)
+    meeting_associations: Mapped[list["UserMeeting"]] = relationship(back_populates="user")
