@@ -1,9 +1,10 @@
 import aiofiles
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Form, UploadFile, File
 from uuid import UUID
-from src.schemas.meeting_schema import SInputMeeting, SCreateMeeting
+
+from src.repositories.question_repository import QuestionsRepository
+from src.schemas.meeting_schema import SInputMeeting
 from src.repositories.meeting_repository import MeetingRepository
-from src.schemas.question_schema import SCreateQuestion
 
 router = APIRouter(
     prefix='/meetings',
@@ -32,25 +33,21 @@ async def get_meeting(id: UUID):
 
 @router.post('', status_code=status.HTTP_201_CREATED)
 async def create_meeting(data: SInputMeeting):
-    meeting = SCreateMeeting(questions=[], **data.model_dump(exclude={'questions'}))
+    meeting_id = await MeetingRepository.create(**data.model_dump())
+    return {'meeting_id': meeting_id}
 
+
+@router.post('/{id}/question', status_code=status.HTTP_201_CREATED)
+async def create_meeting(title: str = Form(), description: str = Form(), materials: list[UploadFile] = File(...)):
     folder_path = 'materials/'
-    for question in data.questions:
-        schema = SCreateQuestion(materials=[], **question.model_dump(exclude={'materials'}))
-        for material in question.materials:
-            file_path = folder_path + material.filename
-            async with aiofiles.open(file_path, 'wb') as file:
-                content = await file.read()
-                await file.write(content)
-            schema.materials.append(file_path)
-        meeting.questions.append(schema)
-
-    meeting_id = await MeetingRepository.create(**meeting.model_dump())
-    return {
-        'id': meeting_id,
-        'questions': len(data.questions),
-        **data.model_dump(exclude={'questions'})
-    }
+    urls = []
+    for material in materials:
+        file_path = folder_path + material.filename
+        async with aiofiles.open(file_path, 'wb') as file:
+            content = await material.read()
+            await file.write(content)
+        urls.append(file_path)
+    await QuestionsRepository.create(title=title, description=description, materials=urls)
 
 
 @router.post('/{id}/sign', status_code=status.HTTP_201_CREATED)

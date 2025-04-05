@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
 from uuid import UUID
-from src.schemas.question_schema import SInputQuestion, SOutputQuestion, SCreateQuestion
+from src.schemas.question_schema import SOutputQuestion
 
 
 class SInputMeeting(BaseModel):
@@ -10,16 +10,6 @@ class SInputMeeting(BaseModel):
     place: str
     is_internal: bool
     counter: UUID
-    questions: list[SInputQuestion]
-
-
-class SCreateMeeting(BaseModel):
-    voting_datetime: datetime
-    end_datetime: datetime
-    place: str
-    is_internal: bool
-    counter: UUID
-    questions: list[SCreateQuestion]
 
 
 class SShortlyMeeting(BaseModel):
