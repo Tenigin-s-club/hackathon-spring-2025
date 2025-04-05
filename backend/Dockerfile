@@ -13,5 +13,6 @@ RUN poetry install --no-root
 COPY . .
 
 RUN chmod a+x ./build/*.sh
+# ENTRYPOINT ["tail", "-f", "/dev/null"]
 
-ENTRYPOINT ./build/app_entrypoint.sh
+CMD [ "sh", "./build/app_entrypoint.sh" ]
