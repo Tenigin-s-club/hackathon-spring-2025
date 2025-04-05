@@ -17,5 +17,5 @@ class Meeting(Base):
     protocol_datetime: Mapped[datetime | None]
     counter: Mapped[str]
     status: Mapped[str]
-    question = relationship('question')
+    # question = relationship('question')
     questions: Mapped[list["Question"]] = relationship(back_populates="meeting")
