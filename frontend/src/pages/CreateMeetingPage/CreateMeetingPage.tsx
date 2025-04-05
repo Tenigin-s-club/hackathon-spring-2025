@@ -5,8 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import { useEffect, useState } from "react";
-import { getVerEmployees } from "@/services/OfficesOperations/OfficesOperations";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,7 +22,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 import { Switch } from "@/components/ui/switch";
-import { VerifiedUsers } from "@/services/OfficesOperations/OfficesOperations.type";
 import {
   Select,
   SelectContent,
@@ -31,6 +30,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import AddQuestion, { schemaQuestion } from "./AddQuestion";
+import { useGetVerifiedEmployees } from "@/services/Employees/Employees";
+import { useAddMeeting } from "@/services/Meetings/Meetings";
 
 const schema = z.object({
   place: z.string({
@@ -44,22 +45,16 @@ const schema = z.object({
 });
 
 const CreateMeetingPage = () => {
-  const [users, setUsers] = useState<VerifiedUsers[]>([]);
+  const { data: users } = useGetVerifiedEmployees();
+  const [addMeeting] = useAddMeeting();
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { is_internal: false },
   });
 
-  useEffect(() => {
-    (async () => {
-      const data = await getVerEmployees();
-      setUsers(data);
-    })();
-  }, []);
-
   const onSubmit = (values: z.infer<typeof schema>) => {
-    console.log(values);
+    addMeeting(values);
   };
 
   return (
@@ -68,7 +63,7 @@ const CreateMeetingPage = () => {
         <h2 className="text-4xl font-bold text-center mt-4 mb-6">
           Создание заседания
         </h2>
-        <form className="flex gap-7">
+        <form className="flex gap-7 max-md:flex-col-reverse">
           <div className="border-[1px] border-gray-300 p-4 rounded-xl  max-w-[600px] flex flex-col gap-6 sticky top-5 h-min">
             <h2 className="text-2xl font-semibold">Основная информация</h2>
             <FormField
@@ -144,7 +139,7 @@ const CreateMeetingPage = () => {
                       <SelectValue placeholder={"Выбрать подсчитывающего..."} />
                     </SelectTrigger>
                     <SelectContent>
-                      {users.map((el) => (
+                      {users?.map((el) => (
                         <SelectItem value={el.id} key={el.id}>
                           {el.fio}
                         </SelectItem>

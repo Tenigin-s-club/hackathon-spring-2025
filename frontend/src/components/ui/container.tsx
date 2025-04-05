@@ -9,7 +9,10 @@ interface Props {
 const Container = ({ className, children }: Props) => {
   return (
     <div
-      className={cn("mx-auto max-w-[1280px] w-[screen-3rem] p-3", className)}
+      className={cn(
+        "mx-auto max-w-[1280px] w-[screen-3rem] p-3 max-sm:p-1",
+        className
+      )}
     >
       {children}
     </div>

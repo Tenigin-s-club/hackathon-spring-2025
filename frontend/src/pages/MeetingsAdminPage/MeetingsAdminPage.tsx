@@ -29,7 +29,7 @@ const MeetingsAdminPage = () => {
         Создать заседание
       </Button>
       <Tabs defaultValue={meetingStatus} className="w-full">
-        <TabsList className="grid max-w-[600px]  grid-cols-3">
+        <TabsList className="grid max-w-[600px] grid-cols-3 ">
           <TabsTrigger
             onClick={() => setMeetingStatus("active")}
             value="active"
@@ -50,7 +50,7 @@ const MeetingsAdminPage = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value={meetingStatus}>
-          <ul className="grid grid-cols-3 gap-4">
+          <ul className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1 ">
             {data?.map((el) => (
               <MeetingCard status={meetingStatus} {...el} />
             ))}

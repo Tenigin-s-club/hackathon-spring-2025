@@ -29,7 +29,6 @@ export type Question = {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const schemaQuestion = z.object({
-  materials: z.array(z.instanceof(File)),
   title: z.string({
     message: "Повестка дня обязательный.",
   }),
