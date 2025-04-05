@@ -72,12 +72,18 @@ async def login(response: Response, data: SLogin, repository: AuthRepository = D
     response.set_cookie(
         settings.auth.cookie_access,
         access_token,
-        expires=(now + settings.auth.access_exp))
+        expires=(now + settings.auth.access_exp),
+        samesite=None
+    )
     response.set_cookie(
         settings.auth.cookie_refresh,
         refresh_token,
         httponly=True,
-        expires=(now + settings.auth.refresh_exp))
+        expires=(now + settings.auth.refresh_exp),
+        samesite=None
+    )
+
+
 
     return
 
