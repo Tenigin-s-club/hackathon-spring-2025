@@ -19,52 +19,53 @@ users_data = [
         id=UUID('00000000-0000-0000-0000-000000000001'),
         fio="Иван Иванов Иванов",
         email="ivan@test.test",
-        password=encode_password("123"),
+        password=encode_password("123456"),
         checked=True
     ),
     User(
         id=UUID('00000000-0000-0000-0000-000000000002'),
         fio="Павел Вячеславович Стручков",
         email="pavlov@test.test",
-        password=encode_password("123"),
+        password=encode_password("123456"),
         checked=True
     ),
     User(
         id=UUID('00000000-0000-0000-0000-000000000003'),
         fio="Яза Кривинина Рыбакова",
         email="yaza@test.test",
-        password=encode_password("123"),
+        password=encode_password("123456"),
         checked=True
     ),
     User(
         id=UUID('00000000-0000-0000-0000-000000000004'),
         fio="Алексей Петров Сидоров",
         email="alex@test.test",
-        password=encode_password("123"),
+        password=encode_password("123456"),
         checked=True
     ),
     User(
         id=UUID('00000000-0000-0000-0000-000000000005'),
         fio="Елена Сергеевна Миронова",
         email="elena@test.test",
-        password=encode_password("123"),
+        password=encode_password("123456"),
         checked=True
     ),
     User(
         id=UUID('00000000-0000-0000-0000-000000000006'),
         fio="Admin",
         email="admin@admin.ru",
-        password=encode_password("123"),
+        password=encode_password("123456"),
         checked=True
     ),
     User(
         id=UUID('00000000-0000-0000-0000-000000000007'),
         fio="Aboba",
         email="aboba@admin.ru",
-        password=encode_password("123"),
+        password=encode_password("123456"),
         checked=False
     )
 ]
+
 
 # Связи пользователей и ролей через явные UUID
 user_roles = [
