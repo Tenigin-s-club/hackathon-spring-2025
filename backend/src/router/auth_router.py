@@ -21,13 +21,15 @@ async def register(data: SRegister, repository: AuthRepository = Depends(AuthRep
     data.password = encode_password(data.password)
     await repository.create_user(data)
 
-    return None
+    return
 
 
 @router.post('/login')
 async def login(response: Response, data: SLogin, repository: AuthRepository = Depends(AuthRepository)):
     user_credential = await repository.get_user_id(data.email)
-    if not check_password(data.password, user_credential.password):
+    if not user_credential:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'invalid password or email')
+    elif not check_password(data.password, user_credential.password):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'invalid password or email')
 
     user_roles = await repository.get_user_roles(user_credential.id)
@@ -56,7 +58,7 @@ async def login(response: Response, data: SLogin, repository: AuthRepository = D
         httponly=True,
         expires=(now + settings.auth.refresh_exp))
 
-    return None
+    return
 
 
 @router.post('/refresh')
@@ -96,7 +98,7 @@ async def refresh(request: Request, response: Response, repository: AuthReposito
         httponly=True,
         expires=(now + settings.auth.refresh_exp))
 
-    return None
+    return
 
 
 
