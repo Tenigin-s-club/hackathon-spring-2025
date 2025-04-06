@@ -8,6 +8,9 @@ const MeetingStatisticPage = () => {
   return (
     <div className="flex items-center justify-center w-full">
       <div className="flex flex-col gap-4 w-[70%] my-auto min-w-[300px]">
+        <h2 className="text-3xl font-bold text-center my-4">
+          Статистика Заседания
+        </h2>
         {data?.map(({ question, result }) => (
           <div className="border-gray-300 rounded-xl border-[1px] ">
             <p>Описание вопроса: {question.title}</p>
