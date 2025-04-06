@@ -1,6 +1,6 @@
 from tabnanny import check
 
-from fastapi import APIRouter, File, HTTPException, UploadFile, Request
+from fastapi import APIRouter, File, HTTPException, UploadFile, Request, status
 from fastapi import status as fastapi_status, Depends, BackgroundTasks
 from uuid import UUID
 
@@ -76,6 +76,8 @@ async def create_question(request: Request, id: int, title: str, description: st
 async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]:
     result: list[SQuestionResult]
     question = await MeetingRepository.get_meetings_question(id)
+    if not question:
+        raise HTTPException(status.HTTP_404_NOT_FOUND)
     for q in question:
         q_result = await QuestionsRepository.find_by_id_or_none(q.id)
         votes = await QuestionsRepository.get_votes(q.id)
