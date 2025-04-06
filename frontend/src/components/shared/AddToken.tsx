@@ -49,6 +49,7 @@ const AddToken = ({ children, meetingId }: Props) => {
         <Input
           id="picture"
           type="file"
+          // @ts-ignore
           onChange={(e) => setMaterial(e.target.value)}
         />
         <DialogClose>
