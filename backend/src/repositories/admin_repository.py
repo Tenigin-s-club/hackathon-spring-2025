@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from src.database.config import async_session_factory
-from src.database.models import User, UserRole
+from src.database.models import User, UserRole, Role
 from sqlalchemy import select, insert, delete
 
 
@@ -15,12 +15,14 @@ class AdminRepository:
 
             return data.mappings().all()
 
-    async def add_roles_user(self, id: UUID, roles_id: list[UUID]):
+    async def add_roles_user(self, id: UUID, roles: list[str]):
         async with async_session_factory() as session:
 
-            for role in roles_id:
-                query = insert(UserRole).values(user_id=id, role_id=role)
-                await  session.execute(query)
+            for role in roles:
+                query = select(Role.id).where(Role.name == role)
+                result = await session.execute(query)
+                query = insert(UserRole).values(user_id=id, role_id=result.scalar())
+                await session.execute(query)
 
             await session.commit()
             return

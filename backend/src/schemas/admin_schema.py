@@ -8,4 +8,4 @@ class SUsersBasic(BaseModel):
     fio: str
 
 class SConfirm(BaseModel):
-    roles: list[UUID]
+    roles: list[str]
