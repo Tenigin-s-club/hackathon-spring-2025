@@ -31,3 +31,11 @@ export interface RequestQuestion {
 }
 
 export type MeetingStatus = "future" | "completed" | "active";
+
+export interface MeetingStatistic {
+  question: Omit<Question, "materials">;
+  result: {
+    agree: number;
+    disagree: number;
+  };
+}

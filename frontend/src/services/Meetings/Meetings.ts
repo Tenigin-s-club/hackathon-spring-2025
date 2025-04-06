@@ -2,6 +2,7 @@ import { baseApi } from "../BaseApi";
 import {
   Meeting,
   MeetingRequest,
+  MeetingStatistic,
   MeetingStatus,
   Question,
   RequestQuestion,
@@ -33,6 +34,10 @@ export const employeesApi = baseApi.injectEndpoints({
         body: body.materials,
       }),
     }),
+
+    getMeetingStatistic: builder.query<MeetingStatistic[], string>({
+      query: (id) => `/meetings/result/${id}`,
+    }),
   }),
 });
 
@@ -42,4 +47,5 @@ export const {
   useGetMeetingQuery: useGetMeeting,
   useAddQuestionMutation: useAddQuestionForMeeting,
   useGetQuestionQuery: useGetQuestion,
+  useGetMeetingStatisticQuery: useGetMeetingStatistic,
 } = employeesApi;

@@ -48,7 +48,17 @@ const MeetingCard = ({
           {status === "active" && <Button>Войти</Button>}
           {status === "future" && <Button variant="ghost">Скоро</Button>}
           {status === "completed" && (
-            <Button variant="secondary">Просмотр</Button>
+            <div>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/meetingstatistic/${id}`);
+                }}
+              >
+                Статистика
+              </Button>
+              <Button variant="secondary">Просмотр</Button>
+            </div>
           )}
         </div>
       </CardContent>

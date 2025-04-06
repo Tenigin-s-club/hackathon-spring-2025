@@ -76,7 +76,7 @@ const QuestionPage = () => {
             </label>
           </div>
         </div>
-        <Button className="w-[50%] mx-auto mt-6">ПОДТВЕРДИТЬ</Button>
+        <Button className="w-[50%] mx-auto mt-6">ПОДПИСАТЬ</Button>
       </div>
     </div>
   );

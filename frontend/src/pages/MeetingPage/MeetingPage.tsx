@@ -34,7 +34,7 @@ const MeetingPage = () => {
         </p>
         <p>
           <span className="font-bold">Формат:</span>
-          {data.is_internal ? "очно" : "очно-заочное"}
+          {data.is_internal ? "очно-заочное" : "очно"}
         </p>
         <p>
           <span className="font-bold">Дата начала:</span>
