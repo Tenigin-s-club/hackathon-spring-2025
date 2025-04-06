@@ -3,6 +3,7 @@ import {
   Meeting,
   MeetingRequest,
   MeetingStatus,
+  Question,
   RequestQuestion,
 } from "./types";
 
@@ -14,6 +15,9 @@ export const employeesApi = baseApi.injectEndpoints({
     }),
     getMeeting: builder.query<Meeting, string>({
       query: (id) => `/meetings/${id}`,
+    }),
+    getQuestion: builder.query<Question, string>({
+      query: (id) => `/meetings/questions/${id}`,
     }),
     addMeeting: builder.mutation<string, MeetingRequest>({
       query: (body) => ({
@@ -37,4 +41,5 @@ export const {
   useAddMeetingMutation: useAddMeeting,
   useGetMeetingQuery: useGetMeeting,
   useAddQuestionMutation: useAddQuestionForMeeting,
+  useGetQuestionQuery: useGetQuestion,
 } = employeesApi;

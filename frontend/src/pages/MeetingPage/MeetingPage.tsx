@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import { fullDateRuFormat } from "@/lib/helpers/date";
 import { useGetMeeting } from "@/services/Meetings/Meetings";
 import { format } from "date-fns";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MeetingPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { data } = useGetMeeting(id || "");
   if (!data) {
@@ -50,7 +51,9 @@ const MeetingPage = () => {
         {data.questions.map((question) => (
           <div className="border-grey-300 border-[1px] rounded-xl p-4 flex justify-between">
             <p>{question.title}</p>
-            <Button>Ответить</Button>
+            <Button onClick={() => navigate(`/question/${question.id}`)}>
+              Ответить
+            </Button>
           </div>
         ))}
       </div>

@@ -54,8 +54,6 @@ function EmployeesTable<TValue>({ columns, data, isRequest }: Props<TValue>) {
     },
   });
 
-  const disApprove = (id: string) => id;
-
   const deleteFunc = async (id: string) => {
     deleteEmployee(id);
   };
