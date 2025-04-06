@@ -13,6 +13,6 @@ class Question(Base):
     title: Mapped[str]
     description: Mapped[str]
     solution: Mapped[str] = mapped_column(default='')
-    meeting_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('meeting.id'))
+    meeting_id: Mapped[int] = mapped_column(ForeignKey('meeting.id'))
     meeting: Mapped["Meeting"] = relationship(back_populates="questions")
     materials: Mapped[list["Material"]] = relationship(back_populates="question")

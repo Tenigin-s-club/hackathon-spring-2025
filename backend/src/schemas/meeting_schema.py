@@ -15,7 +15,7 @@ class SInputMeeting(BaseModel):
 
 
 class SShortlyMeeting(BaseModel):
-    id: UUID
+    id: int
     voting_datetime: datetime
     end_datetime: datetime
     place: str
@@ -30,7 +30,7 @@ class SVoter(BaseModel):
 
 
 class SFullMeeting(BaseModel):
-    id: UUID
+    id: int
     voting_datetime: datetime
     end_datetime: datetime
     place: str
