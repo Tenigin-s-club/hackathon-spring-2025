@@ -38,19 +38,23 @@ const TopBar = () => {
               Главная
             </Button>
           </li> */}
-          {user && user.role.includes("admin") && (
-            <>
-              <li>
-                <Button
-                  variant={pathname === `/meetings` ? "default" : "secondary"}
-                  className="min-w-[150px] w-1/6"
-                  onClick={() => navigate("/meetings")}
-                >
-                  <Presentation />
-                  Заседания
-                </Button>
-              </li>
+          <>
+            <li>
+              <Button
+                variant={
+                  pathname === "/" || pathname.includes(`/meetings`)
+                    ? "default"
+                    : "secondary"
+                }
+                className="min-w-[150px] w-1/6"
+                onClick={() => navigate("/meetings")}
+              >
+                <Presentation />
+                Заседания
+              </Button>
+            </li>
 
+            {user && user.role.includes("admin") && (
               <li>
                 <Button
                   variant={pathname === `/employees` ? "default" : "secondary"}
@@ -60,8 +64,8 @@ const TopBar = () => {
                   <Users /> Сотрудники
                 </Button>
               </li>
-            </>
-          )}
+            )}
+          </>
         </ul>
         <Button
           variant="secondary"

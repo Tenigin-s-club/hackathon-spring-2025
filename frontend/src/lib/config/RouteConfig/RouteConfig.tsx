@@ -2,7 +2,6 @@ import Layout from "@/components/shared/layout";
 
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import AuthPageAsync from "@/pages/AuthPage/AuthPage.async";
-import MainPageAsync from "@/pages/MainPage/MainPage.async";
 import ErrorPage from "@/pages/ErrorPage/ErrorPage";
 import RegisterPageAsync from "@/pages/RegisterPage/RegisterPage.async";
 import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
@@ -37,7 +36,7 @@ export const appRoutersConfig = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <MainPageAsync />,
+        element: <MeetingsAdminPageAsync />,
       },
       {
         path: "/employees",

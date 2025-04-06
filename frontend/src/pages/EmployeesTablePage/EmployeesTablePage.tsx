@@ -10,6 +10,7 @@ import {
   useGetVerifiedEmployees,
 } from "@/services/Employees/Employees";
 import Loader from "@/components/shared/Loader/Loader";
+import { roles, rolesToText } from "@/lib/helpers/roleToText";
 
 export interface UnverifiedUsers {
   id: string;
@@ -60,14 +61,14 @@ const columnsUnVer: ColumnDef<UnverifiedUsers>[] = [
 const columnsVer: ColumnDef<UnverifiedUsers>[] = [
   ...columnsUnVer,
   {
-    accessorKey: "role",
+    accessorKey: "roles",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Роль
+          Роли
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -92,7 +93,10 @@ const EmployeesTableAdminPage = () => {
           <EmployeesTable
             isRequest={false}
             columns={columnsVer}
-            data={verifiedEmployees || []}
+            data={(verifiedEmployees || []).map((el) => ({
+              ...el,
+              roles: rolesToText(el.roles as unknown as (keyof typeof roles)[]),
+            }))}
           />
         </TabsContent>
         <TabsContent value="unver">

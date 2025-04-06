@@ -1,5 +1,5 @@
 export type EmployeeRole =
-  | " member_union"
+  | "member_union"
   | "member_comitet"
   | "admin"
   | "secretar"
@@ -9,7 +9,7 @@ export interface VerifiedUser {
   id: string;
   email: string;
   fio: string;
-  roles: EmployeeRole;
+  roles: EmployeeRole[];
 }
 
 export interface UnVerifiedUser {
