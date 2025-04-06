@@ -74,6 +74,7 @@ async def create_question(request: Request, id: int, title: str, description: st
 @router.post('/result/{id}')
 @check_permission(Permissions.VIEW_VERIFIED_USERS)
 async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]:
+    global result
     result: list[SQuestionResult]
     question = await MeetingRepository.get_meetings_question(id)
     if not question:
