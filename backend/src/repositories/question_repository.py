@@ -47,5 +47,5 @@ class QuestionsRepository:
 
             return SQuestionVoteResult(
                 agree = agree_res.scalar(),
-                disgree = disagree_res.scalar()
+                disagree = disagree_res.scalar()
             )
