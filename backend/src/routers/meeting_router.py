@@ -7,6 +7,7 @@ from fastapi import status as fastapi_status
 from src.repositories.meeting_repository import MeetingRepository
 from src.repositories.question_repository import QuestionsRepository
 from src.schemas.meeting_schema import SInputMeeting, SShortlyMeeting
+from src.utils.storage.storage import Storage
 
 router = APIRouter(
     prefix='/meetings',
@@ -41,12 +42,9 @@ async def create_meeting(data: SInputMeeting) -> UUID:
 @router.post('/{id}/question', status_code=fastapi_status.HTTP_201_CREATED)
 async def create_question(id: UUID, title: str, description: str, file: list[UploadFile] = File(...)) -> None:
     urls = []
+    storage = Storage()
     for material in file:
-        file_path = 'materials/' + material.filename
-        async with aiofiles.open(file_path, 'wb') as file:
-            content = await material.read()
-            await file.write(content)
-        urls.append(file_path)
+        urls.append(storage.put_image(material.filename, material.file))
     await QuestionsRepository.create(meeting_id=id, title=title, description=description, materials=urls)
 
 

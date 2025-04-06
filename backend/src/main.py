@@ -1,6 +1,6 @@
 from typing import Callable
 
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -8,6 +8,8 @@ from src.config import settings
 from src.permissions import ROLE_PERMISSIONS
 from src.routers import routers_list
 from src.utils.security.token import decode as decode_jwt
+from src.utils.storage import *
+from src.utils.storage.storage import Storage
 
 app = FastAPI(root_path='/api')
 for router in routers_list:

@@ -34,10 +34,16 @@ class Auth(BaseModel):
     cookie_refresh: str = "refresh-token"
     cookie_access: str = "access-token"
 
+class Storage(BaseModel):
+    public_key: str = os.environ.get("STORAGE_PUBLIC_KEY")
+    privet_key: str = os.environ.get("STORAGE_PRIVET_KEY")
+
+    bucket: str = os.environ.get("STORAGE_BUCKET")
 
 class Settings(BaseModel):
     database: DataBase = DataBase()
     auth: Auth = Auth()
+    storage: Storage = Storage()
 
 
 settings = Settings()
