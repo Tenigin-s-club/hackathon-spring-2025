@@ -70,6 +70,7 @@ async def create_question(request: Request, id: int, title: str, description: st
         urls.append(material.filename)
     await QuestionsRepository.create(meeting_id=id, title=title, description=description, materials=urls)
 
+
 @router.post('/result/{id}')
 @check_permission(Permissions.VIEW_VERIFIED_USERS)
 async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]:
