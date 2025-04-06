@@ -37,5 +37,5 @@ class Mail:
         for email in emails:
             try:
                 self.__send_mail('Уведомление', content, email)
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"mail error: {e}")
