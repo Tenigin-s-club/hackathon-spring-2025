@@ -1,4 +1,6 @@
-from sqlalchemy import insert, select
+from datetime import datetime
+
+from sqlalchemy import insert, select, and_
 from sqlalchemy.orm import selectinload
 from uuid import UUID
 
@@ -11,9 +13,18 @@ from src.database.models.question import Question
 
 class MeetingRepository:
     @staticmethod
-    async def find_all(**filter_by):
+    async def find_all(status):
         async with async_session_factory() as session:
-            query = select(Meeting.__table__.columns).filter_by(**filter_by)
+            if status == 'active':
+                query = (select(Meeting.__table__.columns)
+                         .where(and_(
+                            Meeting.end_datetime > datetime.now(),
+                            Meeting.voting_datetime < datetime.now()
+                        )))
+            elif status == 'completed':
+                query = select(Meeting.__table__.columns).where(Meeting.end_datetime < datetime.now())
+            elif status == 'future':
+                query = select(Meeting.__table__.columns).where(Meeting.voting_datetime > datetime.now())
             result = await session.execute(query)
             return [SShortlyMeeting(**elem) for elem in result.mappings().all()]
 

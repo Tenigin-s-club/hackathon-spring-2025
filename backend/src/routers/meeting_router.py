@@ -18,7 +18,7 @@ async def get_all_meetings(status: str):
         # сделать норм ошибку
         return 'Met Egora is dead'
     # check token
-    result = await MeetingRepository.find_all(status=status)
+    result = await MeetingRepository.find_all(status)
     return result
 
 
