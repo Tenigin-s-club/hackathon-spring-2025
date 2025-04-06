@@ -85,10 +85,10 @@ async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]
         result.append(
             SQuestionResult(
                 question=SOutputQuestion(
-                    id=q_result.id,
-                    title=q_result.title,
-                    description=q_result.description,
-                    solution=q_result.solution
+                    id=question.id,
+                    title=question.title,
+                    description=question.description,
+                    solution=question.solution
                 ),
                 result=votes
             )

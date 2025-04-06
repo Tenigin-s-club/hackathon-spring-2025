@@ -58,7 +58,7 @@ async def security_middleware(request: Request, handler: Callable):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=['http://194.87.248.63:3000', 'https://194.87.248.63:3000', 'http://localhost:3000', 'https://tunom.ru', 'http://tunom.ru'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
