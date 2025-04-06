@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 
 from src.config import settings
 from src.permissions import ROLE_PERMISSIONS
+from src.repositories.meeting_repository import MeetingRepository
 from src.routers import routers_list
 from src.utils.notification.mail import Mail
 from src.utils.security.token import decode as decode_jwt
@@ -57,8 +58,14 @@ async def security_middleware(request: Request, handler: Callable):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[f'http://localhost:5173', 'http://localhost'],
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+
+@app.post('/test')
+async def test(id: int):
+    question = await MeetingRepository.get_meetings_question(id)
+    print(question)

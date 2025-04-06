@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Users, House, Menu, LogOut, Presentation } from "lucide-react";
-import LogoIcon from "@/assets/logo.jpeg";
+import LogoIcon from "@/assets/logo.jpg";
 import { useSelector } from "react-redux";
 import { showErrorNotification } from "@/lib/helpers/notification";
 import { useLogout } from "@/services/AuthByEmail/AuthByEmail";
