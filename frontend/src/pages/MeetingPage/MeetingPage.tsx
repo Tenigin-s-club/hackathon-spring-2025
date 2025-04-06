@@ -28,7 +28,9 @@ const MeetingPage = () => {
       <div className="flex flex-col gap-4 w-[70%] my-auto min-w-[300px]">
         <h2 className="text-3xl font-bold text-center my-4">Заседание №{id}</h2>
 
-        {status === "active" && <Button>ПОДКЛЮЧИТЬ ВКС</Button>}
+        {status === "active" && (
+          <Button onClick={() => navigate("/vks")}>ПОДКЛЮЧИТЬ ВКС</Button>
+        )}
         <p>
           <span className="font-bold">Место:</span> {data.place}
         </p>
