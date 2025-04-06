@@ -22,10 +22,11 @@ export default defineConfig({
       manifest: {
         name: "ТНС энерго – заседания совета",
         short_name: "ТНС-заседания",
-        start_url: "/",
-        display: "standalone",
+        description: "Приложение для проведения заседаний совета директоров",
+        theme_color: "#ffffff",
         background_color: "#ffffff",
-        theme_color: "#17a13e",
+        display: "standalone",
+        start_url: "/",
         icons: [
           {
             src: "/android-chrome-192x192.png",
@@ -36,6 +37,12 @@ export default defineConfig({
             src: "/android-chrome-512x512.png",
             sizes: "512x512",
             type: "image/png",
+          },
+          {
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
           },
         ],
       },
