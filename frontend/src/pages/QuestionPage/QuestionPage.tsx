@@ -1,10 +1,11 @@
+import AddToken from "@/components/shared/AddToken";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useGetQuestion } from "@/services/Meetings/Meetings";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-type decisionType = "for" | "against" | "abstain";
+type decisionType = "agree" | "disagree" | "abstain";
 const QuestionPage = () => {
   const [decision, setDecision] = useState<decisionType>();
   const { id } = useParams();
@@ -29,15 +30,15 @@ const QuestionPage = () => {
         <div className="my-4 flex flex-col gap-6">
           <div
             className="cursor-pointer flex items-center space-x-4"
-            onClick={() => setDecision("for")}
+            onClick={() => setDecision("agree")}
           >
             <Checkbox
-              checked={decision === "for"}
-              id="for"
+              checked={decision === "agree"}
+              id="agree"
               className="border-green-500 scale-[200%] data-[state=checked]:bg-green-500"
             />
             <label
-              htmlFor="for"
+              htmlFor="agree"
               className="cursor-pointer w-full text-2xl text-green-500 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               За
@@ -45,15 +46,15 @@ const QuestionPage = () => {
           </div>
           <div
             className="cursor-pointer text-red-500 flex items-center space-x-4 "
-            onClick={() => setDecision("against")}
+            onClick={() => setDecision("disagree")}
           >
             <Checkbox
-              checked={decision === "against"}
-              id="against"
+              checked={decision === "disagree"}
+              id="disagree"
               className="border-red-500 scale-[200%] data-[state=checked]:bg-red-500"
             />
             <label
-              htmlFor="against"
+              htmlFor="disagree"
               className="cursor-pointer w-full text-2xl text-red-500  font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Против
@@ -76,7 +77,9 @@ const QuestionPage = () => {
             </label>
           </div>
         </div>
-        <Button className="w-[50%] mx-auto mt-6">ПОДПИСАТЬ</Button>
+        <AddToken meetingId={id || ""} voice={decision || "agree"}>
+          <Button className="w-[50%] mx-auto mt-6">ПОДПИСАТЬ</Button>
+        </AddToken>
       </div>
     </div>
   );
