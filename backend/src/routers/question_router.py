@@ -1,7 +1,8 @@
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, HTTPException, Request, status, UploadFile
 
+from src.permissions import check_permission, Permissions
 from src.repositories.question_repository import QuestionsRepository
 from src.repositories.vote_repository import VotesRepository
 from src.schemas.meeting_schema import SVote
@@ -13,6 +14,7 @@ router = APIRouter(
 
 
 @router.get('/{id}')
+@check_permission(Permissions.VIEW_MEETINGS)
 async def get_question(id: UUID):
     result = await QuestionsRepository.find_by_id_or_none(id)
     if not result:
@@ -21,7 +23,8 @@ async def get_question(id: UUID):
 
 
 @router.post('/vote/{id}', status_code=status.HTTP_201_CREATED)
-async def vote(request: Request, id: UUID, vote: SVote) -> None:
+@check_permission(Permissions.VOTE)
+async def vote(request: Request, id: UUID, vote: SVote, user_sert: UploadFile | None) -> None:
     if vote['choice'] not in [-1, 0, 1]:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY,
                             'you can only use -1 (disagree), 0 (abstain) and 1 (agree) in choice field')
