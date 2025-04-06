@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, func
 from sqlalchemy.orm import selectinload
 
 from src.database.config import async_session_factory
@@ -36,3 +36,8 @@ class QuestionsRepository:
                 )
                 await session.execute(query)
             await session.commit()
+
+    @staticmethod
+    async def get_votes(question_id: int):
+        async with async_session_factory() as session:
+            query = select(func.count())

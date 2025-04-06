@@ -19,6 +19,8 @@ class Permissions:
     SIGN_PROTOCOLS = "protocols:sign"
     SOSAT = "do:sosat"
 
+    WRITE_DOCS = 'meetings:write:close'
+
 
 ROLE_PERMISSIONS = {
     "member_union": [
@@ -49,7 +51,8 @@ ROLE_PERMISSIONS = {
         Permissions.VIEW_MEETING_DETAILS,
         Permissions.VIEW_QUESTIONS,
         Permissions.VOTE,
-        Permissions.SIGN_PROTOCOLS
+        Permissions.SIGN_PROTOCOLS,
+        Permissions.WRITE_DOCS
     ],
     "corporative_secretar": [
         Permissions.VIEW_OWN_PROFILE,
@@ -58,7 +61,8 @@ ROLE_PERMISSIONS = {
         Permissions.VIEW_MEETING_DETAILS,
         Permissions.VIEW_QUESTIONS,
         Permissions.VOTE,
-        Permissions.SIGN_PROTOCOLS
+        Permissions.SIGN_PROTOCOLS,
+        Permissions.WRITE_DOCS
     ],
     "guest": [
         Permissions.VIEW_MEETINGS

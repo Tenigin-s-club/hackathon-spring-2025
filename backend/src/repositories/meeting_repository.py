@@ -5,6 +5,7 @@ from sqlalchemy import and_, insert, select
 from sqlalchemy.orm import selectinload
 
 from src.database.config import async_session_factory
+from src.database.models import Question
 from src.database.models.meeting import Meeting
 from src.schemas.meeting_schema import (SFullMeeting,
                                         SShortlyMeeting)
@@ -45,3 +46,11 @@ class MeetingRepository:
             meeting = await session.execute(query)
             await session.commit()
             return meeting.scalar()
+
+    @staticmethod
+    async def get_meetings_question(id: int):
+        async with async_session_factory as session:
+            query = select(Question).where(Question.meeting_id == id)
+            questions = await session.execute(query)
+
+            return questions

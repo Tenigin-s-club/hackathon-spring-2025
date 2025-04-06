@@ -26,3 +26,11 @@ class SOutputFullQuestion(BaseModel):
     materials: list[SMaterial]
     # for ORM
     model_config = ConfigDict(from_attributes=True)
+
+class SQuestionVoteResult(BaseModel):
+    agree: int
+    disagree: int
+
+class SQuestionResult(BaseModel):
+    question: SOutputQuestion
+    result: SQuestionVoteResult

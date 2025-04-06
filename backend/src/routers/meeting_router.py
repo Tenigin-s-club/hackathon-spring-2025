@@ -1,10 +1,15 @@
+from tabnanny import check
+
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi import status as fastapi_status, Depends, BackgroundTasks
+from uuid import UUID
 
+from src.permissions import check_permission, Permissions
 from src.repositories.auth_repository import AuthRepository
 from src.repositories.meeting_repository import MeetingRepository
 from src.repositories.question_repository import QuestionsRepository
 from src.schemas.meeting_schema import SInputMeeting, SShortlyMeeting
+from src.schemas.question_schema import SQuestionResult
 from src.utils.storage.storage import Storage
 from src.utils.notification.mail import Mail
 
@@ -15,6 +20,7 @@ router = APIRouter(
 
 
 @router.get('')
+@check_permission(Permissions.VIEW_MEETINGS)
 async def get_all_meetings(status: str) -> list[SShortlyMeeting]:
     if status not in ['active', 'completed', 'future']:
         raise HTTPException(fastapi_status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -24,6 +30,7 @@ async def get_all_meetings(status: str) -> list[SShortlyMeeting]:
 
 
 @router.get('/{id}')
+@check_permission(Permissions.VIEW_MEETINGS)
 async def get_meeting(id: int):
     result = await MeetingRepository.find_by_id_or_none(id)
     if not result:
@@ -33,6 +40,7 @@ async def get_meeting(id: int):
 
 
 @router.post('', status_code=fastapi_status.HTTP_201_CREATED)
+@check_permission(Permissions.CREATE_MEETINGS)
 async def create_meeting(
         data: SInputMeeting,
         background_task: BackgroundTasks,
@@ -52,6 +60,7 @@ async def create_meeting(
 
 
 @router.post('/{id}/question', status_code=fastapi_status.HTTP_201_CREATED)
+@check_permission(Permissions.CREATE_MEETINGS)
 async def create_question(id: int, title: str, description: str, file: list[UploadFile] = File(...)) -> None:
     urls = []
     storage = Storage()
@@ -60,7 +69,18 @@ async def create_question(id: int, title: str, description: str, file: list[Uplo
         urls.append(material.filename)
     await QuestionsRepository.create(meeting_id=id, title=title, description=description, materials=urls)
 
+@router.post('/result/{id}')
+@check_permission(Permissions.VIEW_VERIFIED_USERS)
+async def get_meeting_result(id: int) -> list[SQuestionResult]:
+    result: list[SQuestionResult]
+    question = MeetingRepository.get_meetings_question(id)
+    for q in question:
+        q_result = QuestionsRepository.find_by_id_or_none(q.id)
+
+
+
 
 @router.post('/{id}/sign', status_code=fastapi_status.HTTP_201_CREATED)
+@check_permission(Permissions.WRITE_DOCS)
 def sign_meeting(id: int) -> None:
     return None

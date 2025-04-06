@@ -57,7 +57,7 @@ async def security_middleware(request: Request, handler: Callable):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[f'http://localhost:5173', 'http://localhost'],
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
