@@ -31,9 +31,7 @@ class Mail:
             finally:
                 session.quit()
 
-    async def send_meeting_documentation(self, time_start: datetime.time, date_start: datetime.date):
-        repo = AuthRepository()
-        emails = await repo.all_users_email()
+    def send_meeting_documentation(self, time_start: datetime.time, date_start: datetime.date, emails):
         content = meeting_notification_content.format(time_start=time_start, date=date_start)
         for email in emails:
             try:
