@@ -71,15 +71,13 @@ async def create_question(request: Request, id: int, title: str, description: st
     await QuestionsRepository.create(meeting_id=id, title=title, description=description, materials=urls)
 
 
-@router.post('/result/{id}')
+@router.get('/result/{id}')
 @check_permission(Permissions.VIEW_VERIFIED_USERS)
 async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]:
-    global result
-    result: list[SQuestionResult]
+    result: list[SQuestionResult] = []
     question = await MeetingRepository.get_meetings_question(id)
     if not question:
         raise HTTPException(status.HTTP_404_NOT_FOUND)
-    print(question)
 
     for q in question:
         q_result = await QuestionsRepository.find_by_id_or_none(q.id)
