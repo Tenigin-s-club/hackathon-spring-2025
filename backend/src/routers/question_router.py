@@ -1,6 +1,8 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Request
 from src.repositories.question_repository import QuestionsRepository
 from uuid import UUID
+
+from src.repositories.vote_repository import VotesRepository
 from src.schemas.meeting_schema import SInputMeeting, SVote
 
 router = APIRouter(
@@ -18,9 +20,13 @@ async def get_question(id: UUID):
     return result
 
 
-# переголосование?????
 @router.post('/vote/{id}', status_code=status.HTTP_201_CREATED)
-def vote(status: SVote):
-    if status['choice'] not in [-1, 0, 1]:
+async def vote(request: Request, id: UUID, vote: SVote):
+    if vote['choice'] not in [-1, 0, 1]:
         return 'Egor idi nahui'
+    result = await VotesRepository.find_one_or_none(question_id=id, user_id=request.state.user_id)
+    if not result:
+        await VotesRepository.create(question_id=id, user_id=request.state.user_id, answer=vote['choice'])
+    else:
+        await VotesRepository.update(id=result['id'], answer=vote['choice'])
     return None
