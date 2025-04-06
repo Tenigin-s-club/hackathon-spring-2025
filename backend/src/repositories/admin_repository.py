@@ -8,7 +8,7 @@ from src.database.models import Role, User, UserRole
 
 class AdminRepository:
     @staticmethod
-    async def find_all_users(self, verification: bool = False) -> list[dict]:
+    async def find_all_users(verification: bool = False) -> list[dict]:
         async with async_session_factory() as session:
             query = select(User.id, User.fio, User.email).where(User.checked == verification)
             result = await session.execute(query)

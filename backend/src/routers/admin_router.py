@@ -1,10 +1,13 @@
+from logging import getLogger
 from uuid import UUID
 
 from fastapi import APIRouter, Request, status
 
 from src.permissions import Permissions, check_permission
 from src.repositories.admin_repository import AdminRepository
+from src.repositories.auth_repository import AuthRepository
 from src.schemas.admin_schema import SConfirm, SUsersBasic
+from src.schemas.auth_schema import SUser
 
 router = APIRouter(
     prefix='/admin',
@@ -14,9 +17,13 @@ router = APIRouter(
 
 @router.get('/verified_users')
 @check_permission(Permissions.MANAGE_USERS)
-async def get_verified_users(request: Request) -> list[SUsersBasic]:
+async def get_verified_users(request: Request) -> list[SUser]:
     users = await AdminRepository.find_all_users(True)
-    return [SUsersBasic(**row) for row in users]
+    result = []
+    for user in users:
+        roles = await AuthRepository.find_roles_by_user_id(user["id"])
+        result.append(SUser(roles=roles, **user))
+    return result
 
 
 @router.get('/unverified_users')
