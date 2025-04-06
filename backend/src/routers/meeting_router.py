@@ -9,7 +9,7 @@ from src.repositories.auth_repository import AuthRepository
 from src.repositories.meeting_repository import MeetingRepository
 from src.repositories.question_repository import QuestionsRepository
 from src.schemas.meeting_schema import SInputMeeting, SShortlyMeeting
-from src.schemas.question_schema import SQuestionResult
+from src.schemas.question_schema import SQuestionResult, SOutputQuestion
 from src.utils.storage.storage import Storage
 from src.utils.notification.mail import Mail
 
@@ -85,7 +85,12 @@ async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]
         votes = await QuestionsRepository.get_votes(q.id)
         result.append(
             SQuestionResult(
-                question=q_result,
+                question=SOutputQuestion(
+                    id=question.id,
+                    title=question.title,
+                    description=question.description,
+                    solution=question.solution
+                ),
                 result=votes
             )
         )
