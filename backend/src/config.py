@@ -40,10 +40,15 @@ class Storage(BaseModel):
 
     bucket: str = os.environ.get("STORAGE_BUCKET")
 
+class Mail(BaseModel):
+    mail: str = os.environ.get("MAIL")
+    password: str = os.environ.get("MAIL_PASSWORD")
+
 class Settings(BaseModel):
     database: DataBase = DataBase()
     auth: Auth = Auth()
     storage: Storage = Storage()
+    mail: Mail = Mail()
 
 
 settings = Settings()

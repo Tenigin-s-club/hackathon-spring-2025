@@ -52,3 +52,11 @@ class AuthRepository:
                      .where(UserRole.user_id == id))
             result = await session.execute(query)
             return result.scalars().all()
+
+    @staticmethod
+    async def all_users_email() -> list[str]:
+        async with async_session_factory() as session:
+            query = select(User.email)
+            data = await session.execute(query)
+
+            return data.scalars().all()

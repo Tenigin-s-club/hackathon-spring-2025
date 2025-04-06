@@ -2,12 +2,13 @@ from logging import getLogger
 from uuid import UUID
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
-from fastapi import status as fastapi_status
+from fastapi import status as fastapi_status, Depends
 
 from src.repositories.meeting_repository import MeetingRepository
 from src.repositories.question_repository import QuestionsRepository
 from src.schemas.meeting_schema import SInputMeeting, SShortlyMeeting
 from src.utils.storage.storage import Storage
+from src.utils.notification.mail import Mail
 
 router = APIRouter(
     prefix='/meetings',
@@ -34,8 +35,11 @@ async def get_meeting(id: UUID):
 
 
 @router.post('', status_code=fastapi_status.HTTP_201_CREATED)
-async def create_meeting(data: SInputMeeting) -> UUID:
+async def create_meeting(data: SInputMeeting, mail: Mail = Depends(Mail)) -> UUID:
     meeting_id = await MeetingRepository.create(**data.model_dump())
+
+    await mail.send_meeting_documentation(data.voting_datetime.time(), data.voting_datetime.date())
+
     return meeting_id
 
 
