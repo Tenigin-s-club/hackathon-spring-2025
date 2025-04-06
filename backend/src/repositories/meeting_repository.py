@@ -5,10 +5,8 @@ from sqlalchemy import and_, insert, select
 from sqlalchemy.orm import selectinload
 
 from src.database.config import async_session_factory
-from src.database.models import Material
 from src.database.models.meeting import Meeting
-from src.database.models.question import Question
-from src.schemas.meeting_schema import (SFullMeeting, SInputMeeting,
+from src.schemas.meeting_schema import (SFullMeeting,
                                         SShortlyMeeting)
 
 

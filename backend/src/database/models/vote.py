@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy import CheckConstraint, ForeignKey, UniqueConstraint, text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.database.config import Base
 

@@ -1,9 +1,8 @@
 import datetime
 from uuid import UUID
 
-from fastapi import (APIRouter, Depends, HTTPException, Request, Response,
+from fastapi import (APIRouter, HTTPException, Request, Response,
                      status)
-from starlette.responses import JSONResponse
 
 from src.config import settings
 from src.repositories.auth_repository import AuthRepository

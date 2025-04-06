@@ -1,11 +1,10 @@
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Request, status
-from starlette.responses import JSONResponse
 
 from src.repositories.question_repository import QuestionsRepository
 from src.repositories.vote_repository import VotesRepository
-from src.schemas.meeting_schema import SInputMeeting, SVote
+from src.schemas.meeting_schema import SVote
 
 router = APIRouter(
     prefix='/meetings/questions',

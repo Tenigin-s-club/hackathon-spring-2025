@@ -1,16 +1,7 @@
-from uuid import UUID
-
 from sqlalchemy import insert, select, update
-from sqlalchemy.orm import selectinload
 
 from src.database.config import async_session_factory
-from src.database.models import Material
-from src.database.models.meeting import Meeting
-from src.database.models.question import Question
 from src.database.models.vote import Vote
-from src.schemas.meeting_schema import (SFullMeeting, SInputMeeting,
-                                        SShortlyMeeting)
-from src.schemas.question_schema import SOutputFullQuestion
 
 
 class VotesRepository:

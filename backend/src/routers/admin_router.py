@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Request, status
 
 from src.permissions import Permissions, check_permission
 from src.repositories.admin_repository import AdminRepository

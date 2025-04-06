@@ -1,9 +1,8 @@
 from uuid import UUID
 
 import aiofiles
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi import status as fastapi_status
-from starlette.responses import JSONResponse
 
 from src.repositories.meeting_repository import MeetingRepository
 from src.repositories.question_repository import QuestionsRepository
