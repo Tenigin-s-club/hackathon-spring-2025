@@ -27,6 +27,7 @@ import { ChartColumnBig, Check, Trash2, X } from "lucide-react";
 import { useSelector } from "react-redux";
 import { UnVerifiedUser, VerifiedUser } from "@/services/Employees/types";
 import { User } from "@/services/User/types";
+import { ConfirmEmployeeDialog } from "./ConfirmEmployeeDialog";
 
 interface Props<TValue> {
   columns: ColumnDef<UnVerifiedUser | VerifiedUser, TValue>[];
@@ -54,10 +55,9 @@ function EmployeesTable<TValue>({ columns, data, isRequest }: Props<TValue>) {
   });
 
   const disApprove = (id: string) => id;
-  const Approve = (id: string) => id;
 
   const deleteFunc = async (id: string) => {
-    await deleteEmployee(id);
+    deleteEmployee(id);
   };
 
   return (
@@ -119,14 +119,13 @@ function EmployeesTable<TValue>({ columns, data, isRequest }: Props<TValue>) {
                       {isRequest ? (
                         <>
                           <X
-                            onClick={() => disApprove(row.id)}
+                            onClick={() => deleteFunc(data[id]?.id)}
                             color="#DC2626"
                             className="cursor-pointer"
                           />
-                          <Check
-                            onClick={() => Approve(row.id)}
-                            color="#16a34a"
-                          />
+                          <ConfirmEmployeeDialog user={data[Number(row.id)]}>
+                            <Check color="#16a34a" />
+                          </ConfirmEmployeeDialog>
                         </>
                       ) : (
                         <>

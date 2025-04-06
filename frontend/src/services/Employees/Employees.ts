@@ -9,32 +9,37 @@ export const employeesApi = baseApi.injectEndpoints({
     }),
     getUnVerEmployees: builder.query<UnVerifiedUser[], void>({
       query: () => "/admin/unverified_users",
+      providesTags: ["UnVerEmployees"],
     }),
     deleteEmployee: builder.mutation<{ success: boolean; id: number }, string>({
       query(id) {
         return {
-          url: `/admin/verified_users/${id}`,
+          url: `/admin/disconfirm_user/${id}`,
           method: "DELETE",
         };
       },
       // Invalidates all queries that subscribe to this Post `id` only.
-      invalidatesTags: (result, error, id) => [{ type: "Employees", id }],
+      invalidatesTags: ["Employees", "UnVerEmployees"],
     }),
-    changeEmployeeRole: builder.mutation<VerifiedUser, EmployeeRole>({
-      query: (id, ...data) => ({
-        url: `employees/${id}/`,
-        method: "PATCH",
-        body: data,
-      }),
-      invalidatesTags: ["Employees"],
-    }),
-    // createCommentForEmployee: builder.mutation<void, CommentRequest>({
-    //   query: (body) => ({
-    //     url: "/comments/",
-    //     method: "POST",
-    //     body,
+    // changeEmployeeRole: builder.mutation<VerifiedUser, EmployeeRole>({
+    //   query: (id, ...data) => ({
+    //     url: `employees/${id}/`,
+    //     method: "PATCH",
+    //     body: data,
     //   }),
+    //   invalidatesTags: ["Employees"],
     // }),
+    confirmEmployee: builder.mutation<
+      void,
+      { id: string; roles: EmployeeRole[] }
+    >({
+      query: ({ id, roles }) => ({
+        url: `/admin/confirm_user/${id}`,
+        method: "POST",
+        body: { roles: roles },
+      }),
+      invalidatesTags: ["UnVerEmployees", "Employees"],
+    }),
   }),
 });
 
@@ -42,4 +47,5 @@ export const {
   useGetUnVerEmployeesQuery: useGetUnVerEmployees,
   useGetVerifiedEmployeesQuery: useGetVerifiedEmployees,
   useDeleteEmployeeMutation: useDeleteEmployee,
+  useConfirmEmployeeMutation: useConfirmEmployee,
 } = employeesApi;
