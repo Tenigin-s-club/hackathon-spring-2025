@@ -50,7 +50,7 @@ class MeetingRepository:
     @staticmethod
     async def get_meetings_question(id: int):
         async with async_session_factory() as session:
-            query = select(Question).where(Question.meeting_id == id)
+            query = select(Question.__table__.columns).where(Question.meeting_id == id)
             questions = await session.execute(query)
 
-            return questions
+            return [Question(**row) for row in questions.mappings().all()]
