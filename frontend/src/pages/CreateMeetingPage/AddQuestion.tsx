@@ -29,6 +29,18 @@ export const schemaQuestion = z.object({
     message: "Повестка дня обязательный.",
   }),
   description: z.string({ message: "Текст повестки дня обязательный." }),
+  materials: z
+    .instanceof(File)
+    .refine(
+      (file) =>
+        [
+          "application/pdf",
+          "application/vnd.ms-excel",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ].includes(file.type),
+      { message: "Invalid document file type" }
+    )
+    .array(),
 });
 
 interface AddQuestionProps {
@@ -72,11 +84,11 @@ const AddQuestion = ({
             )}
           />
           <div className="grid w-full gap-1.5 mb-5 mt-5">
-            <Label htmlFor="message">Текст сообщения</Label>
+            <Label htmlFor="message">Проект решения</Label>
             <Textarea
               {...form.register("description")}
               className="max-h-48"
-              placeholder="Введите сообщение...."
+              placeholder="Введите проект решения..."
             />
           </div>
           <FormLabel>Материалы</FormLabel>

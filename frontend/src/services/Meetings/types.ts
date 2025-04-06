@@ -4,7 +4,6 @@ export interface Meeting {
   end_datetime: string;
   place: string;
   is_internal: true;
-  protocol_datetime: string;
   counter: string;
   questions: Question[];
 }
@@ -13,10 +12,8 @@ export interface MeetingRequest {
   voting_datetime: string;
   end_datetime: string;
   place: string;
-  is_internal: true;
-  protocol_datetime: string;
+  is_internal: boolean;
   counter: string;
-  questions: Question[];
 }
 
 export interface Question {
@@ -24,6 +21,13 @@ export interface Question {
   title: string;
   description: string;
   solution: string;
+  materials: string[];
+}
+export interface RequestQuestion {
+  idMeeting: string;
+  title: string;
+  description: string;
+  materials: FormData;
 }
 
 export type MeetingStatus = "future" | "completed" | "active";

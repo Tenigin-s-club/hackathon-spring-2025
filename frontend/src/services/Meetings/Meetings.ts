@@ -1,5 +1,10 @@
 import { baseApi } from "../BaseApi";
-import { Meeting, MeetingRequest, MeetingStatus } from "./types";
+import {
+  Meeting,
+  MeetingRequest,
+  MeetingStatus,
+  RequestQuestion,
+} from "./types";
 
 export const employeesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,13 +15,19 @@ export const employeesApi = baseApi.injectEndpoints({
     getMeeting: builder.query<Meeting, string>({
       query: (id) => `/meetings/${id}`,
     }),
-    addMeeting: builder.mutation<MeetingRequest, Meeting>({
+    addMeeting: builder.mutation<string, MeetingRequest>({
       query: (body) => ({
         url: "/meetings",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Meetings"],
+    }),
+    addQuestion: builder.mutation<void, RequestQuestion>({
+      query: (body) => ({
+        url: `/meetings/${body.idMeeting}/question?title=${body.title}&description=${body.description}`,
+        method: "POST",
+        body: body.materials,
+      }),
     }),
   }),
 });
@@ -24,5 +35,6 @@ export const employeesApi = baseApi.injectEndpoints({
 export const {
   useGetMeetingsQuery: useGetMeetings,
   useAddMeetingMutation: useAddMeeting,
-  useGetMeetingQuery: useGetMeting,
+  useGetMeetingQuery: useGetMeeting,
+  useAddQuestionMutation: useAddQuestionForMeeting,
 } = employeesApi;

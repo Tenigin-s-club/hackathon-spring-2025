@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { fullDateRuFormat } from "@/lib/helpers/date";
-import { useGetMeting } from "@/services/Meetings/Meetings";
+import { useGetMeeting } from "@/services/Meetings/Meetings";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
 
 const MeetingPage = () => {
   const { id } = useParams();
-  const { data } = useGetMeting(id || "");
+  const { data } = useGetMeeting(id || "");
   if (!data) {
     return <div>Не получилось получить данные заседения</div>;
   }

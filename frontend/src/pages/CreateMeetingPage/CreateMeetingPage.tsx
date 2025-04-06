@@ -31,7 +31,12 @@ import {
 } from "@/components/ui/select";
 import AddQuestion, { schemaQuestion } from "./AddQuestion";
 import { useGetVerifiedEmployees } from "@/services/Employees/Employees";
-import { useAddMeeting } from "@/services/Meetings/Meetings";
+import {
+  useAddMeeting,
+  useAddQuestionForMeeting,
+} from "@/services/Meetings/Meetings";
+import { showErrorNotification } from "@/lib/helpers/notification";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   place: z.string({
@@ -47,14 +52,37 @@ const schema = z.object({
 const CreateMeetingPage = () => {
   const { data: users } = useGetVerifiedEmployees();
   const [addMeeting] = useAddMeeting();
+  const [addQuestionForMeeting] = useAddQuestionForMeeting();
   const [modalAddOpen, setModalAddOpen] = useState(false);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { is_internal: false },
   });
+  const navigate = useNavigate();
 
-  const onSubmit = (values: z.infer<typeof schema>) => {
-    addMeeting(values);
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    const id = await addMeeting({
+      voting_datetime: values.voting_datetime.toISOString().slice(0, -1),
+      end_datetime: values.end_datetime.toISOString().slice(0, -1),
+      place: values.place,
+      is_internal: values.is_internal,
+      counter: values.counter,
+    });
+    for (let i = 0; i < values.questions.length; i++) {
+      const files = new FormData();
+      values.questions[i].materials.forEach((f) => files.append("file", f));
+      addQuestionForMeeting({
+        idMeeting: id.data || "",
+        title: values.questions[i].title,
+        description: values.questions[i].description,
+        materials: files,
+      });
+    }
+    try {
+      navigate("/meetings");
+    } catch {
+      showErrorNotification("Ошибка при создании заседания");
+    }
   };
 
   return (
@@ -140,7 +168,7 @@ const CreateMeetingPage = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {users?.map((el) => (
-                        <SelectItem value={el.id} key={el.id}>
+                        <SelectItem value={el.fio} key={el.id}>
                           {el.fio}
                         </SelectItem>
                       ))}
