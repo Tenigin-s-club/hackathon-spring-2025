@@ -28,7 +28,7 @@ class Auth(BaseModel):
     public_key: Path = BASE_DIR / "src" / "certs" / "jwt-public.pem"
     private_key: Path = BASE_DIR / "src" / "certs" / "jwt-private.pem"
     algorithm: str = "RS256"
-    access_exp: datetime.timedelta = datetime.timedelta(minutes=15)
+    access_exp: datetime.timedelta = datetime.timedelta(hours=52)
     refresh_exp: datetime.timedelta = datetime.timedelta(days=30)
     type_token: TypeToken = TypeToken()
     cookie_refresh: str = "refresh-token"

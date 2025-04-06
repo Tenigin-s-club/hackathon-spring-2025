@@ -40,7 +40,6 @@ async def login(response: Response, data: SLogin) -> None:
     if not checked_user:
         raise HTTPException(status.HTTP_403_FORBIDDEN, 'activate account')
 
-    # оно дублируется но мне похуй, если хочешь можешь исправить, егор предложил создать файл helpers.py
     payload = {
         'sub': str(user_credential.id),
         'roles': user_roles
