@@ -78,12 +78,14 @@ async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]
     question = await MeetingRepository.get_meetings_question(id)
     if not question:
         raise HTTPException(status.HTTP_404_NOT_FOUND)
+    print(question)
+
     for q in question:
         q_result = await QuestionsRepository.find_by_id_or_none(q.id)
         votes = await QuestionsRepository.get_votes(q.id)
         result.append(
             SQuestionResult(
-                question=q,
+                question=q_result,
                 result=votes
             )
         )
