@@ -11,6 +11,7 @@ import CreateMeetingPageAsync from "@/pages/CreateMeetingPage/CreateMeetingPage.
 import EmployeePageAsync from "@/pages/EmployeePage/EmployeePage.async";
 import MeetingPage from "@/pages/MeetingPage/MeetingPage";
 import QuestionPage from "@/pages/QuestionPage/QuestionPage";
+import VksPage from "@/pages/VKS/VksPage";
 
 const authRoutes: RouteObject[] = [
   {
@@ -61,6 +62,10 @@ export const appRoutersConfig = createBrowserRouter([
       {
         path: "/question/:id",
         element: <QuestionPage />,
+      },
+      {
+        path: "/vks",
+        element: <VksPage />,
       },
     ],
   },
