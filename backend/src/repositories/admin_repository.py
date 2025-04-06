@@ -2,7 +2,7 @@ from uuid import UUID
 
 from src.database.config import async_session_factory
 from src.database.models import User, UserRole, Role
-from sqlalchemy import select, insert, delete
+from sqlalchemy import select, insert, delete, update
 
 
 class AdminRepository:
@@ -23,6 +23,7 @@ class AdminRepository:
                 result = await session.execute(query)
                 query = insert(UserRole).values(user_id=id, role_id=result.scalar())
                 await session.execute(query)
+                query = update(User).where(user_id=id).values(checked=True)
 
             await session.commit()
             return
