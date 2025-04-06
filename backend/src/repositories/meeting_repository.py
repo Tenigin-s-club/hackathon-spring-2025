@@ -53,4 +53,4 @@ class MeetingRepository:
             query = select(Question.__table__.columns).where(Question.meeting_id == id)
             questions = await session.execute(query)
 
-            return [Question(**row) for row in questions.mappings().all()]
+            return questions.unique().mappings().all()
