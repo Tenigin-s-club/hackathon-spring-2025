@@ -1,6 +1,6 @@
+from logging import getLogger
 from uuid import UUID
 
-import aiofiles
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi import status as fastapi_status
 
@@ -44,7 +44,8 @@ async def create_question(id: UUID, title: str, description: str, file: list[Upl
     urls = []
     storage = Storage()
     for material in file:
-        urls.append(storage.put_image(material.filename, material.file))
+        storage.put_file(material.filename, material.file)
+        urls.append(material.filename)
     await QuestionsRepository.create(meeting_id=id, title=title, description=description, materials=urls)
 
 

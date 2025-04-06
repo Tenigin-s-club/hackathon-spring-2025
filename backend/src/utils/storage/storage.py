@@ -1,3 +1,5 @@
+from typing import BinaryIO
+
 from src.config import settings
 import boto3
 
@@ -17,6 +19,12 @@ class Storage:
         )
         self.client = s3
 
-    def put_image(self, key: str, file: bytes):
+    def put_file(self, key: str, file: BinaryIO) -> None:
         self.client.put_object(Bucket=self.bucket, Key=key, Body=file)
-        return self.storage_link + f'/{self.bucket}/{key}'
+
+    def generate_url(self, key: str) -> str:
+        return self.client.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': self.bucket, 'Key': key},
+            ExpiresIn=600,
+        )

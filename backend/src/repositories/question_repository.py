@@ -7,6 +7,7 @@ from src.database.config import async_session_factory
 from src.database.models import Material
 from src.database.models.question import Question
 from src.schemas.question_schema import SOutputFullQuestion
+from src.utils.storage.storage import Storage
 
 
 class QuestionsRepository:
@@ -18,7 +19,8 @@ class QuestionsRepository:
                      .where(Question.id == id))
             result = await session.execute(query)
             question = SOutputFullQuestion.model_validate(result.scalars().one_or_none())
-            return {'materials': [material.url for material in question.materials], **question.model_dump(exclude={'materials'})}
+            storage = Storage()
+            return {'materials': [storage.generate_url(material.url) for material in question.materials], **question.model_dump(exclude={'materials'})}
 
     @staticmethod
     async def create(**values) -> None:
