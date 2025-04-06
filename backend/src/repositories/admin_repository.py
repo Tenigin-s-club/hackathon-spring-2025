@@ -23,7 +23,7 @@ class AdminRepository:
                 result = await session.execute(query)
                 query = insert(UserRole).values(user_id=id, role_id=result.scalar())
                 await session.execute(query)
-                query = update(User).where(user_id=id).values(checked=True)
+                query = update(User).where(user_id == id).values(checked=True)
 
             await session.commit()
             return
