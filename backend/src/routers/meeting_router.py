@@ -75,10 +75,10 @@ async def create_question(request: Request, id: int, title: str, description: st
 @check_permission(Permissions.VIEW_VERIFIED_USERS)
 async def get_meeting_result(request: Request, id: int) -> list[SQuestionResult]:
     result: list[SQuestionResult]
-    question = MeetingRepository.get_meetings_question(id)
+    question = await MeetingRepository.get_meetings_question(id)
     for q in question:
-        q_result = QuestionsRepository.find_by_id_or_none(q.id)
-        votes = QuestionsRepository.get_votes(q.id)
+        q_result = await QuestionsRepository.find_by_id_or_none(q.id)
+        votes = await QuestionsRepository.get_votes(q.id)
         result.append(
             SQuestionResult(
                 question=q,
