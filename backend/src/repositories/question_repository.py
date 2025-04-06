@@ -1,12 +1,12 @@
 from uuid import UUID
 
-from sqlalchemy import insert, select, func
+from sqlalchemy import insert, select, func, and_
 from sqlalchemy.orm import selectinload
 
 from src.database.config import async_session_factory
-from src.database.models import Material
+from src.database.models import Material, Vote
 from src.database.models.question import Question
-from src.schemas.question_schema import SOutputFullQuestion
+from src.schemas.question_schema import SOutputFullQuestion, SQuestionResult
 from src.utils.storage.storage import Storage
 
 
@@ -40,4 +40,12 @@ class QuestionsRepository:
     @staticmethod
     async def get_votes(question_id: int):
         async with async_session_factory() as session:
-            query = select(func.count())
+            query_agree = select(func.count(Vote.id)).where(and_(Vote.answer == 1, Vote.question_id == question_id))
+            query_disagree = select(func.count(Vote.id)).where(Vote.answer == -1, Vote.question_id == question_id)
+            agree_res = await session.execute(query_agree)
+            disagree_res = await session.execute(query_disagree)
+
+            return SQuestionResult(
+                agree = agree_res.scalar(),
+                disgree = disagree_res.scalar()
+            )

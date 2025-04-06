@@ -15,7 +15,7 @@ router = APIRouter(
 
 @router.get('/{id}')
 @check_permission(Permissions.VIEW_MEETINGS)
-async def get_question(id: UUID):
+async def get_question(request: Request, id: UUID):
     result = await QuestionsRepository.find_by_id_or_none(id)
     if not result:
         raise HTTPException(status.HTTP_404_NOT_FOUND, 'question with this ID is not found')
