@@ -9,6 +9,7 @@ import EmployeesTableAdminPageAsync from "@/pages/EmployeesTablePage/EmployeesTa
 import MeetingsAdminPageAsync from "@/pages/MeetingsAdminPage/MeetingsAdminPage.async";
 import CreateMeetingPageAsync from "@/pages/CreateMeetingPage/CreateMeetingPage.async";
 import EmployeePageAsync from "@/pages/EmployeePage/EmployeePage.async";
+import VksPage from "@/pages/VKS/VksPage";
 import MeetingsStatisticPageAsync from "@/pages/MeetingStatisticPage/MeetingStatisticPage.async";
 import QuestionPageAsync from "@/pages/QuestionPage/QuestionPage.async";
 import MeetingPageAsync from "@/pages/MeetingPage/MeetingPage.async";
@@ -66,6 +67,10 @@ export const appRoutersConfig = createBrowserRouter([
       {
         path: "/meetingstatistic/:id",
         element: <MeetingsStatisticPageAsync />,
+      },
+      {
+        path: "/vks",
+        element: <VksPage />,
       },
     ],
   },
