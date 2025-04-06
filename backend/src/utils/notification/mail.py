@@ -33,7 +33,7 @@ class Mail:
     async def send_meeting_documentation(self, time_start: datetime.time, date_start: datetime.date):
         repo = AuthRepository()
         emails = await repo.all_users_email()
-        content = meeting_notification_content.format(time_start, date_start)
+        content = meeting_notification_content.format(time_start=time_start, date=date_start)
         for email in emails:
             try:
                 self.__send_mail('Уведомление', content, email)
