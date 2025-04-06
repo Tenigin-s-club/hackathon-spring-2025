@@ -1,6 +1,6 @@
 {
   "name": "ТНС энерго – заседания совета",
-  "short_name": "ТНС заседания",
+  "short_name": "ТНС-заседания",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
