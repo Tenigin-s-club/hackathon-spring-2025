@@ -1,19 +1,20 @@
 from datetime import datetime
-
-from sqlalchemy import insert, select, and_
-from sqlalchemy.orm import selectinload
 from uuid import UUID
+
+from sqlalchemy import and_, insert, select
+from sqlalchemy.orm import selectinload
 
 from src.database.config import async_session_factory
 from src.database.models import Material
-from src.schemas.meeting_schema import SInputMeeting, SShortlyMeeting, SFullMeeting
 from src.database.models.meeting import Meeting
 from src.database.models.question import Question
+from src.schemas.meeting_schema import (SFullMeeting, SInputMeeting,
+                                        SShortlyMeeting)
 
 
 class MeetingRepository:
     @staticmethod
-    async def find_all(status):
+    async def find_all(status) -> list[SShortlyMeeting]:
         async with async_session_factory() as session:
             if status == 'active':
                 query = (select(Meeting.__table__.columns)
@@ -40,7 +41,7 @@ class MeetingRepository:
             return {'voters': [voter.fio for voter in meeting.voters], **meeting.model_dump(exclude={'voters'})}
 
     @staticmethod
-    async def create(**values) -> None:
+    async def create(**values) -> UUID:
         async with async_session_factory() as session:
             query = insert(Meeting).values(**values).returning(Meeting.id)
             meeting = await session.execute(query)

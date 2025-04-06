@@ -1,8 +1,7 @@
+from functools import wraps
 from typing import Callable
 
-from fastapi import status, Request, HTTPException
-
-from functools import wraps
+from fastapi import HTTPException, Request, status
 
 
 class Permissions:
@@ -73,12 +72,8 @@ def check_permission(required_permission: str):
         async def wrapper(request: Request, *args, **kwargs):
             if not hasattr(request.state, 'permissions'):
                 raise HTTPException(status.HTTP_401_UNAUTHORIZED)
-
             if required_permission not in request.state.permissions:
                 raise HTTPException(status.HTTP_403_FORBIDDEN)
-
             return await func(request, *args, **kwargs)
-
         return wrapper
-
     return decorator

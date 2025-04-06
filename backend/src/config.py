@@ -1,6 +1,9 @@
+import datetime
+import os
 from pathlib import Path
+
+import dotenv
 from pydantic import BaseModel
-import datetime, os, dotenv
 
 BASE_DIR = Path(__file__).parent.parent
 
@@ -35,7 +38,6 @@ class Auth(BaseModel):
 class Settings(BaseModel):
     database: DataBase = DataBase()
     auth: Auth = Auth()
-
 
 
 settings = Settings()
