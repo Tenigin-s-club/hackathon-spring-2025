@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
-import { Office } from "@/services/OfficesOperations/OfficesOperations.type";
 
-const OfficeCard = ({ id, name, image, address }: Office) => {
+const OfficeCard = ({
+  id,
+  name,
+  image,
+  address,
+}: {
+  id: number;
+  name: string;
+  image: string;
+  address: string;
+}) => {
   return (
     <Link to={`/map/${id}`}>
       <Card className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">

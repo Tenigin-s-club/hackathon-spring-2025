@@ -11,6 +11,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    // @ts-ignore
     setUserData: (state, action: PayloadAction<User>) => {
       state = action.payload;
     },
