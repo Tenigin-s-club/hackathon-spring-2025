@@ -28,7 +28,7 @@ class MeetingRepository:
             return [SShortlyMeeting(**elem) for elem in result.mappings().all()]
 
     @staticmethod
-    async def find_by_id_or_none(id: UUID):
+    async def find_by_id_or_none(id: int):
         async with async_session_factory() as session:
             query = (select(Meeting)
                      .options(selectinload(Meeting.questions))
@@ -39,7 +39,7 @@ class MeetingRepository:
             return {'voters': [voter.fio for voter in meeting.voters], **meeting.model_dump(exclude={'voters'})}
 
     @staticmethod
-    async def create(**values) -> UUID:
+    async def create(**values) -> int:
         async with async_session_factory() as session:
             query = insert(Meeting).values(**values).returning(Meeting.id)
             meeting = await session.execute(query)

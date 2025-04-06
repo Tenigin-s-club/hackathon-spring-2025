@@ -14,16 +14,18 @@ const QuestionPage = () => {
     <div className="flex items-center justify-center w-full">
       <div className="flex flex-col gap-4 w-[70%] my-auto min-w-[300px]">
         <h2 className="text-3xl font-bold text-center my-4">
-          Вопрос №: {data?.id}
+          Описание вопроса: {data?.title}
         </h2>
-        <p>
-          <span className="font-bold">Описание вопроса: </span>
-          {data?.title}
-        </p>
+
         <p>
           <span className="font-bold">Предоставленное решение:</span>
           {data?.description}
         </p>
+        {data?.materials.map((material, id) => (
+          <a className="text-blue-500" href={material}>
+            ссылка на ресурс №{id}
+          </a>
+        ))}
         <div className="my-4 flex flex-col gap-6">
           <div
             className="cursor-pointer flex items-center space-x-4"

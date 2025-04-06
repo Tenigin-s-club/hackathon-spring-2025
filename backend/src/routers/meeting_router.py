@@ -26,7 +26,7 @@ async def get_all_meetings(status: str) -> list[SShortlyMeeting]:
 
 
 @router.get('/{id}')
-async def get_meeting(id: UUID):
+async def get_meeting(id: int):
     result = await MeetingRepository.find_by_id_or_none(id)
     if not result:
         raise HTTPException(fastapi_status.HTTP_404_NOT_FOUND,
@@ -35,7 +35,7 @@ async def get_meeting(id: UUID):
 
 
 @router.post('', status_code=fastapi_status.HTTP_201_CREATED)
-async def create_meeting(data: SInputMeeting, mail: Mail = Depends(Mail)) -> UUID:
+async def create_meeting(data: SInputMeeting, mail: Mail = Depends(Mail)) -> int:
     meeting_id = await MeetingRepository.create(**data.model_dump())
 
     await mail.send_meeting_documentation(data.voting_datetime.time(), data.voting_datetime.date())
@@ -44,7 +44,7 @@ async def create_meeting(data: SInputMeeting, mail: Mail = Depends(Mail)) -> UUI
 
 
 @router.post('/{id}/question', status_code=fastapi_status.HTTP_201_CREATED)
-async def create_question(id: UUID, title: str, description: str, file: list[UploadFile] = File(...)) -> None:
+async def create_question(id: int, title: str, description: str, file: list[UploadFile] = File(...)) -> None:
     urls = []
     storage = Storage()
     for material in file:
@@ -54,5 +54,5 @@ async def create_question(id: UUID, title: str, description: str, file: list[Upl
 
 
 @router.post('/{id}/sign', status_code=fastapi_status.HTTP_201_CREATED)
-def sign_meeting(id: UUID) -> None:
+def sign_meeting(id: int) -> None:
     return None
