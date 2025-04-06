@@ -1,4 +1,5 @@
 from uuid import UUID
+
 from src.database.models import Role, User, UserRole
 from src.utils.security.password import encode_password
 

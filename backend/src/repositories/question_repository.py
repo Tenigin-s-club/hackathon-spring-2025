@@ -1,11 +1,10 @@
+from uuid import UUID
+
 from sqlalchemy import insert, select
 from sqlalchemy.orm import selectinload
-from uuid import UUID
 
 from src.database.config import async_session_factory
 from src.database.models import Material
-from src.schemas.meeting_schema import SInputMeeting, SShortlyMeeting, SFullMeeting
-from src.database.models.meeting import Meeting
 from src.database.models.question import Question
 from src.schemas.question_schema import SOutputFullQuestion
 

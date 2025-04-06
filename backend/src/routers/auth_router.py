@@ -1,14 +1,15 @@
 import datetime
-import uuid
+from uuid import UUID
 
-from fastapi import APIRouter, Response, Depends, HTTPException, status, Request
+from fastapi import (APIRouter, HTTPException, Request, Response,
+                     status)
 
-from src.schemas.auth_schema import SRegister, SLogin, SUser
-from src.repositories.auth_repository import AuthRepository
-from src.utils.security.password import encode_password, check_password
-from src.utils.security.token import encode as encode_jwt
-from src.utils.security.token import decode as decode_jwt
 from src.config import settings
+from src.repositories.auth_repository import AuthRepository
+from src.schemas.auth_schema import SLogin, SRegister, SUser
+from src.utils.security.password import check_password, encode_password
+from src.utils.security.token import decode as decode_jwt
+from src.utils.security.token import encode as encode_jwt
 
 router = APIRouter(
     prefix='/auth',
@@ -17,45 +18,25 @@ router = APIRouter(
 
 
 @router.get('/me')
-async def me(request: Request, repository: AuthRepository = Depends(AuthRepository)):
-    token = request.cookies.get(settings.auth.cookie_access)
-
-    try:
-        decode_token = await decode_jwt(token.encode())
-        sub = decode_token['sub']
-    except Exception:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Unauthorized')
-
-    user = await repository.get_user(sub)
-
-    return SUser(**user, roles=decode_token['roles'])
+async def me(request: Request) -> SUser:
+    user = await AuthRepository.find_by_id_or_none(request.state.user_id)
+    return SUser(roles=request.state.user_roles, **user)
 
 
-@router.post('/register', status_code=201)
-async def register(data: SRegister, repository: AuthRepository = Depends(AuthRepository)):
+@router.post('/register', status_code=status.HTTP_201_CREATED)
+async def register(data: SRegister) -> None:
     data.password = encode_password(data.password)
-    await repository.create_user(data)
-
-    return
-
-
-@router.delete('/delete_user/{id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(id: uuid.UUID, repository: AuthRepository = Depends(AuthRepository)):
-    await repository.delete_user(id)
-    return
+    await AuthRepository.create(**data.model_dump())
 
 
 @router.post('/login')
-async def login(response: Response, data: SLogin, repository: AuthRepository = Depends(AuthRepository)):
-    user_credential = await repository.get_user_id(data.email)
-    if not user_credential:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'invalid password or email')
-    elif not check_password(data.password, user_credential.password):
+async def login(response: Response, data: SLogin) -> None:
+    user_credential = await AuthRepository.find_by_email_or_none(data.email)
+    if not user_credential or not check_password(data.password, user_credential.password):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'invalid password or email')
 
-    user_roles = await repository.get_user_roles(user_credential.id)
-
-    checked_user = await repository.check_valid_user(user_credential.id)
+    user_roles = await AuthRepository.find_roles_by_user_id(user_credential.id)
+    checked_user = await AuthRepository.find_is_user_checked(user_credential.id)
     if not checked_user:
         raise HTTPException(status.HTTP_403_FORBIDDEN, 'activate account')
 
@@ -84,27 +65,20 @@ async def login(response: Response, data: SLogin, repository: AuthRepository = D
     )
 
 
-
-    return
-
-
 @router.post('/refresh')
-async def refresh(request: Request, response: Response, repository: AuthRepository = Depends(AuthRepository)):
+async def refresh(request: Request, response: Response) -> None:
     refresh_token = request.cookies.get(settings.auth.cookie_refresh)
-
     try:
         pyload = await decode_jwt(refresh_token.encode())
-
     except Exception as e:
         print(e)
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'token timeout')
 
     sub = pyload['sub']
-
-    user_roles = await repository.get_user_roles(uuid.UUID(sub))
-    checked_user = await repository.check_valid_user(uuid.UUID(sub))
+    user_roles = await AuthRepository.find_roles_by_user_id(UUID(sub))
+    checked_user = await AuthRepository.find_is_user_checked(UUID(sub))
     if not checked_user:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, 'activate account')
+        raise HTTPException(status.HTTP_403_FORBIDDEN, 'your account is not activated')
 
     payload = {
         'sub': sub,
@@ -125,12 +99,13 @@ async def refresh(request: Request, response: Response, repository: AuthReposito
         httponly=True,
         expires=(now + settings.auth.refresh_exp))
 
-    return
 
-
-@router.post('/logout', status_code=204)
-async def logout(response: Response):
+@router.post('/logout', status_code=status.HTTP_204_NO_CONTENT)
+async def logout(response: Response) -> None:
     response.delete_cookie(settings.auth.cookie_access)
     response.delete_cookie(settings.auth.cookie_refresh)
 
-    return
+
+@router.delete('/delete_user/{id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(id: UUID) -> None:
+    await AuthRepository.delete(id)

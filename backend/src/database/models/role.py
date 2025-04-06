@@ -1,9 +1,10 @@
 import uuid
 
 from sqlalchemy import text
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.database.config import Base
+
 
 class Role(Base):
     __tablename__ = 'role'

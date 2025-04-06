@@ -1,8 +1,6 @@
-from typing import Annotated
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
-from fastapi import UploadFile, File
-from uuid import UUID
 
 
 class SMaterial(BaseModel):

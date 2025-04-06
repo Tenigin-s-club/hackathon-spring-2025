@@ -2,8 +2,8 @@ import asyncio
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.seeds.v1.data import roles_data, users_data, user_roles
 from src.database.config import async_session_factory
+from src.seeds.v1.data import roles_data, user_roles, users_data
 
 
 async def seed_database(session: AsyncSession):
