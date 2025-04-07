@@ -55,10 +55,18 @@ async def security_middleware(request: Request, handler: Callable):
             content={"detail": "Internal Server Error"}
         )
 
+origins = [
+    'http://194.87.248.63:3000',
+    'https://194.87.248.63:3000',
+    'http://localhost:3000',
+    'https://tunom.ru',
+    'http://tunom.ru'
+    'https://localhost:3000',
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://194.87.248.63:3000', 'https://194.87.248.63:3000', 'http://localhost:3000', 'https://tunom.ru', 'http://tunom.ru'],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
