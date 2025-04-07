@@ -54,7 +54,6 @@ async def login(response: Response, data: SLogin) -> None:
         access_token,
         expires=(now + settings.auth.access_exp),
         samesite=None,
-        secure=True,
     )
     response.set_cookie(
         settings.auth.cookie_refresh,
@@ -62,7 +61,6 @@ async def login(response: Response, data: SLogin) -> None:
         httponly=True,
         expires=(now + settings.auth.refresh_exp),
         samesite=None,
-        secure=True
     )
 
 
@@ -93,14 +91,12 @@ async def refresh(request: Request, response: Response) -> None:
     response.set_cookie(
         settings.auth.cookie_access,
         access_token,
-        secure=True,
         samesite=None,
         expires=(now + settings.auth.access_exp))
     response.set_cookie(
         settings.auth.cookie_refresh,
         refresh_token,
         httponly=True,
-        secure=True,
         samesite=None,
         expires=(now + settings.auth.refresh_exp))
 
