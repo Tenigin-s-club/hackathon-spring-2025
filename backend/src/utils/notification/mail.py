@@ -13,7 +13,6 @@ class Mail:
     @staticmethod
     def __send_mail(subject: str, content: str, recipient: str) -> None:
         with smtplib.SMTP_SSL("smtp.mail.ru", 465) as session:
-            print(settings.mail.password)
             session.login(settings.mail.mail, settings.mail.password)
 
             msg = MIMEMultipart()
