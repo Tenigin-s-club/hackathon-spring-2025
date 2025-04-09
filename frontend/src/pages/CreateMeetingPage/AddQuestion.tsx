@@ -31,15 +31,15 @@ export const schemaQuestion = z.object({
   description: z.string({ message: "Текст повестки дня обязательный." }),
   materials: z
     .instanceof(File)
-    .refine(
-      (file) =>
-        [
-          "application/pdf",
-          "application/vnd.ms-excel",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ].includes(file.type),
-      { message: "Invalid document file type" }
-    )
+    // .refine(
+    //   (file) =>
+    //     [
+    //       "application/pdf",
+    //       "application/vnd.ms-excel",
+    //       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    //     ].includes(file.type),
+    //   { message: "Invalid document file type" }
+    // )
     .array(),
 });
 

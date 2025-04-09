@@ -11,7 +11,7 @@ import {
 export const employeesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getMeetings: builder.query<Meeting[], MeetingStatus>({
-      query: (status) => `/meetings/?status=${status}`,
+      query: (status) => `/meetings?status=${status}`,
       providesTags: ["Meetings"],
     }),
     getMeeting: builder.query<Meeting, string>({
