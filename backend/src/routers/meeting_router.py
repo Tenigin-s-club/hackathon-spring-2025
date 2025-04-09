@@ -1,15 +1,12 @@
-from tabnanny import check
-
 from fastapi import APIRouter, File, HTTPException, UploadFile, Request, status
 from fastapi import status as fastapi_status, Depends, BackgroundTasks
-from uuid import UUID
 
 from src.permissions import check_permission, Permissions
 from src.repositories.auth_repository import AuthRepository
 from src.repositories.meeting_repository import MeetingRepository
 from src.repositories.question_repository import QuestionsRepository
 from src.schemas.meeting_schema import SInputMeeting, SShortlyMeeting
-from src.schemas.question_schema import SQuestionResult, SOutputQuestion, SQuestionVoteResult
+from src.schemas.question_schema import SQuestionResult, SOutputQuestion
 from src.utils.storage.storage import Storage
 from src.utils.notification.mail import Mail
 
